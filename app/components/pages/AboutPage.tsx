@@ -1,6 +1,7 @@
 "use client";
 
 import { aboutPoints, locations, type PageKey } from "../../data/site";
+import { AnimatedNumber } from "../AnimatedNumber";
 import { Icon } from "../Icon";
 import { PageHero } from "../PageHero";
 import { LocationCard, Stat } from "../ui";
@@ -12,10 +13,10 @@ export function AboutPage({ onNavigate }: Props) {
     <div>
       <PageHero kicker="About" title="A small senior team, not an agency with a sales layer" body="The person you talk to first is the person who writes the code, and the person who answers when something breaks a year later.">
         <div className="mt-[34px] flex flex-wrap gap-7">
-          <Stat inverse value="10+" label="years commercial" />
-          <Stat inverse value="2" label="bases, clients worldwide" />
-          <Stat inverse value="7" label="languages shipped" />
-          <Stat inverse value="0" label="layers between you and the engineer" />
+          <Stat inverse value={<AnimatedNumber value={10} suffix="+" />} label="years commercial" />
+          <Stat inverse value={<AnimatedNumber value={2} />} label="bases, clients worldwide" />
+          <Stat inverse value={<AnimatedNumber value={7} />} label="languages shipped" />
+          <Stat inverse value={<AnimatedNumber value={0} />} label="layers between you and the engineer" />
         </div>
       </PageHero>
 

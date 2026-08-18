@@ -1,9 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { capabilities, demos, locations, mapSteps, orbitItems, plans, prices, processSteps, tierDefinitions, type PageKey, type RegionKey } from "../../data/site";
 import type { Dictionary } from "../../i18n/config";
+import { AnimatedNumber } from "../AnimatedNumber";
 import { Icon } from "../Icon";
+import { Logo } from "../Logo";
 import { QuantumCanvas } from "../QuantumCanvas";
 import { Action, CheckList, Kicker, SectionHeading } from "../ui";
 
@@ -21,43 +23,74 @@ const messages = [
   { text: "Can I get a quote for 20 pieces?", time: "17:26" },
 ];
 
-const resultCards = [
-  { title: "Social audience", icon: "group", value: "3,200", note: "followers, from zero", color: "#E8A22B" },
-  { title: "Calls from Maps", icon: "call", value: "420", note: "tap-to-call from the listing", color: "#4FC3B2" },
-  { title: "Website visits", icon: "monitoring", value: "8,400", note: "month twelve", color: "#7FA7E8" },
-];
-
 function ResultsSection() {
   const bars = [14, 19, 26, 30, 38, 44, 52, 61, 68, 78, 88, 100];
+  const sectionRef = useRef<HTMLElement>(null);
+  const [active, setActive] = useState(false);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+    const observer = new IntersectionObserver((entries) => {
+      if (!entries[0]?.isIntersecting) return;
+      setActive(true);
+      observer.disconnect();
+    }, { threshold: 0.12 });
+    observer.observe(section);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section className="reveal bg-[#0E1317] text-[#F5F2EC]">
+    <section ref={sectionRef} className="reveal bg-[#0E1317] text-[#F5F2EC]">
       <div className="mx-auto max-w-[1200px] px-5 py-[clamp(56px,8vw,112px)] sm:px-8 lg:px-12">
         <SectionHeading inverse kicker="From nowhere to found" title="Watch it happen, screen by screen." body="Scroll and each panel fills in. This is the shape of a first year: found on the map, found in search, and a phone that rings." />
-        <div className="mt-11 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {resultCards.map((card) => (
-            <article key={card.title} className="rounded-2xl border border-white/10 bg-[#151B20] p-[22px]">
-              <div className="flex items-center justify-between gap-3">
-                <span className="font-mono text-[12.5px] uppercase tracking-[0.06em] text-[#F5F2EC]/60">{card.title}</span>
-                <Icon name={card.icon} className="text-[22px]" />
-              </div>
-              <p className="mt-5 font-mono text-[39px] leading-none" style={{ color: card.color }}>{card.value}</p>
-              <p className="mt-1.5 text-[12.5px] text-[#F5F2EC]/60">{card.note}</p>
-              {card.title === "Website visits" ? (
-                <div className="mt-5 flex h-[100px] items-end gap-1.5">{bars.map((height, index) => <span key={height} className="block flex-1 origin-bottom rounded-t-[3px] animate-[bar-rise_900ms_cubic-bezier(0.16,0.84,0.28,1)_both]" style={{ height: `${height}%`, background: index > 8 ? "#E8A22B" : "rgba(232,162,43,0.45)", animationDelay: `${index * 60}ms` }} />)}</div>
-              ) : (
-                <svg viewBox="0 0 260 60" preserveAspectRatio="none" aria-hidden="true" className="mt-4 h-14 w-full overflow-visible">
-                  <polyline points="0,54 20,50 40,52 62,44 84,40 106,42 128,31 150,27 172,29 196,18 218,13 240,15 260,4" fill="none" stroke={card.color} strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" className="animate-[line-draw_1900ms_ease-out_both] [stroke-dasharray:420] [stroke-dashoffset:420]" />
-                </svg>
-              )}
-            </article>
-          ))}
+        <div className="mt-11 grid grid-cols-[repeat(auto-fit,minmax(min(272px,100%),1fr))] gap-5">
+          <article className="rounded-2xl border border-white/10 bg-[#151B20] p-[22px]">
+            <div className="flex items-center gap-3">
+              <span className="h-10 w-10 rounded-full border border-white/15 bg-[repeating-linear-gradient(135deg,rgba(245,242,236,0.16)_0_1px,transparent_1px_7px)]" />
+              <span><span className="block font-mono text-[12.5px]">@atelier.mira</span><span className="block font-mono text-[12.5px] text-white/50">Instagram · TikTok</span></span>
+            </div>
+            <p className="mb-0.5 mt-5 font-mono text-[39px] leading-none"><AnimatedNumber value={3200} /></p>
+            <p className="text-[12.5px] text-white/60">followers, from zero</p>
+            <svg viewBox="0 0 260 60" preserveAspectRatio="none" aria-hidden="true" className="mt-4 block h-14 w-full overflow-visible">
+              <polyline points="0,54 20,50 40,52 62,44 84,40 106,42 128,31 150,27 172,29 196,18 218,13 240,15 260,4" fill="none" stroke="#E8A22B" strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" className={`metric-line ${active ? "is-active" : ""}`} />
+            </svg>
+            <div className="mt-3.5 grid grid-cols-3 gap-1.5">{[0, 1, 2].map((item) => <span key={item} className="aspect-square bg-[repeating-linear-gradient(135deg,rgba(245,242,236,0.14)_0_1px,transparent_1px_8px)]" />)}</div>
+          </article>
 
-          <article className="rounded-2xl border border-white/10 bg-[#151B20] p-[22px] sm:col-span-2 lg:col-span-1">
+          <article className="rounded-2xl border border-white/10 bg-[#151B20] p-[22px]">
+            <div className="flex items-center justify-between gap-3"><span className="font-mono text-[12.5px] uppercase tracking-[0.06em] text-white/60">Local search</span><span className="font-mono text-[12.5px] text-[#E8A22B]">position <AnimatedNumber value={1} from={47} /></span></div>
+            <div className="mt-[18px] grid gap-2">
+              <div className={`metric-pin flex items-center gap-3 rounded-[10px] border border-[#E8A22B]/50 bg-[#E8A22B]/10 p-3 ${active ? "is-active" : ""}`}><span className="grid h-[26px] w-[26px] shrink-0 place-items-center rounded-full bg-[#E8A22B] font-mono text-[12.5px] text-[#0E1317]">1</span><span><span className="block text-sm font-medium">Your business</span><span className="block font-mono text-[12.5px] text-white/60">4.8 · open now · 300 m</span></span></div>
+              {[62, 48, 56, 44].map((width, index) => <div key={width} className="flex items-center gap-3 rounded-[10px] border border-white/10 p-3"><span className="grid h-[26px] w-[26px] shrink-0 place-items-center rounded-full border border-white/15 font-mono text-[12.5px] text-white/50">{index + 2}</span><span className="grid flex-1 gap-1.5"><span className="block h-2 rounded bg-white/15" style={{ width: `${width}%` }} /><span className="block h-2 w-[38%] rounded bg-white/8" /></span></div>)}
+            </div>
+          </article>
+
+          <article className="rounded-2xl border border-white/10 bg-[#151B20] p-[22px]">
             <div className="flex items-center justify-between gap-3">
               <span className="font-mono text-[12.5px] uppercase tracking-[0.06em] text-[#F5F2EC]/60">Messages</span>
-              <span className="rounded-full bg-[#E8A22B] px-2.5 py-0.5 font-mono text-[12.5px] text-[#0E1317]">1,000</span>
+              <span className="rounded-full bg-[#E8A22B] px-2.5 py-0.5 font-mono text-[12.5px] text-[#0E1317]"><AnimatedNumber value={1000} /></span>
             </div>
-            <div className="mt-[18px] grid gap-2.5">{messages.map((message, index) => <div key={message.time} className="max-w-[88%] animate-[fade-in_500ms_ease-out_both] rounded-[14px_14px_14px_4px] bg-white/7 px-3.5 py-3" style={{ animationDelay: `${index * 130}ms` }}><p className="text-sm leading-[1.45]">{message.text}</p><p className="mt-1.5 font-mono text-[12.5px] text-[#F5F2EC]/50">{message.time}</p></div>)}</div>
+            <div className="mt-[18px] grid gap-2.5">{messages.map((message, index) => <div key={message.time} className={`metric-message max-w-[88%] rounded-[14px_14px_14px_4px] bg-white/7 px-3.5 py-3 ${active ? "is-active" : ""}`} style={{ transitionDelay: `${index * 160}ms` }}><p className="text-sm leading-[1.45]">{message.text}</p><p className="mt-1.5 font-mono text-[12.5px] text-[#F5F2EC]/50">{message.time}</p></div>)}</div>
+          </article>
+
+          <article className="rounded-2xl border border-white/10 bg-[#151B20] p-[22px]">
+            <div className="flex items-center justify-between gap-3"><span className="font-mono text-[12.5px] uppercase tracking-[0.06em] text-white/60">Calls from Maps</span><span className="font-mono text-xl"><AnimatedNumber value={420} /></span></div>
+            <div className="mt-[18px] grid gap-2.5">{[["+352 621 •• •• ••", "2 min · Maps"], ["+383 44 ••• •••", "5 min · Maps"], ["+352 691 •• •• ••", "1 min · Maps"]].map(([number, detail], index) => <div key={number} className={`metric-call flex items-center gap-3 border-b border-white/10 p-3 ${active ? "is-active" : ""}`} style={{ transitionDelay: `${index * 150}ms` }}><span className="h-2.5 w-2.5 shrink-0 rounded-full bg-[#E8A22B]" /><span className="flex-1 font-mono text-sm">{number}</span><span className="font-mono text-[12.5px] text-white/55">{detail}</span></div>)}</div>
+            <p className="mt-3 text-[12.5px] leading-[1.5] text-white/55">Tap-to-call from the listing, before anyone opens the site.</p>
+          </article>
+
+          <article className="rounded-2xl border border-white/10 bg-[#151B20] p-[22px]">
+            <div className="flex items-center justify-between gap-3"><span className="font-mono text-[12.5px] uppercase tracking-[0.06em] text-white/60">Website visits</span><span className="font-mono text-xl"><AnimatedNumber value={8400} /></span></div>
+            <div className="mt-5 flex h-[120px] items-end gap-1.5">{bars.map((height, index) => <span key={`${height}-${index}`} className={`metric-bar block flex-1 origin-bottom rounded-t-[3px] ${active ? "is-active" : ""}`} style={{ height: `${height}%`, background: index > 8 ? "#E8A22B" : "rgba(232,162,43,0.45)", transitionDelay: `${index * 60}ms` }} />)}</div>
+            <div className="mt-2.5 flex justify-between font-mono text-[12.5px] text-white/50"><span>month 1</span><span>month 12</span></div>
+          </article>
+
+          <article className="rounded-2xl border border-white/10 bg-[#151B20] p-[22px]">
+            <span className="font-mono text-[12.5px] uppercase tracking-[0.06em] text-white/60">Google Search impressions</span>
+            <p className="mt-[18px] flex items-baseline gap-2"><Icon name="trending_up" className="text-[26px] text-[#8FC46B]" /><span className="font-mono text-[39px] leading-none text-[#8FC46B]">+<AnimatedNumber value={300} suffix="%" /></span></p>
+            <p className="mb-5 mt-2.5 text-sm leading-[1.5] text-white/70">People who saw you in search results, month twelve against month one.</p>
+            <div className="grid gap-3">{[["wine bar near me", "1,900 / mo", 92], ["wine bar luxembourg gare", "820 / mo", 62], ["natural wine luxembourg", "410 / mo", 34]].map(([label, value, width]) => <div key={String(label)}><div className="flex justify-between gap-3 font-mono text-[12.5px] text-white/65"><span>{label}</span><span>{value}</span></div><div className="mt-1.5 h-[5px] rounded bg-white/8"><span className={`metric-growth block h-full rounded bg-[#E8A22B] ${active ? "is-active" : ""}`} style={{ width: active ? `${width}%` : "3%" }} /></div></div>)}</div>
           </article>
 
           <article className="grain relative min-h-[300px] overflow-hidden rounded-2xl border border-white/10 bg-[#151B20] sm:col-span-2 lg:col-span-3">
@@ -70,12 +103,14 @@ function ResultsSection() {
               <span className="rounded-full border border-white/20 bg-white/10 px-3.5 py-2 font-mono text-[12.5px] text-[#F5F2EC]/75">Top rated</span>
             </div>
             {[["12%", "34%"], ["74%", "30%"], ["26%", "76%"], ["62%", "84%"], ["86%", "62%"]].map(([left, top]) => <span key={`${left}${top}`} className="absolute h-[7px] w-[7px] rounded-full bg-white/30" style={{ left, top }} />)}
-            <div className="absolute left-[44%] top-[52%] animate-[drop-in_760ms_cubic-bezier(0.2,1.5,0.4,1)_both]">
+            {[['14%', '38%', 'Café Ost · 3.9'], ['76%', '34%', 'Bar Nord · 4.1'], ['28%', '80%', 'Weinhaus · 4.0']].map(([left, top, name]) => <span key={name} className="absolute font-mono text-[12.5px] text-white/40" style={{ left, top }}>{name}</span>)}
+            <div className={`metric-map-pin absolute left-[44%] top-[52%] ${active ? "is-active" : ""}`}>
               <span className="absolute -left-[27px] -top-[27px] h-[72px] w-[72px] animate-[lum-pulse_2600ms_ease-out_infinite] rounded-full border border-[#E8A22B]" />
               <span className="relative block h-[18px] w-[18px] rounded-full bg-[#E8A22B] shadow-[0_4px_14px_rgba(232,162,43,0.28)]" />
-              <span className="absolute left-[30px] top-[-16px] whitespace-nowrap rounded-[10px] bg-[#F5F2EC] p-3 text-[#0E1317] shadow-xl">
+              <span className="absolute left-[30px] top-[-16px] whitespace-nowrap rounded-[10px] bg-[#F5F2EC] px-[13px] py-2.5 text-[#0E1317] shadow-xl">
                 <span className="block font-display text-[15px] font-medium">Vinera, your business</span>
                 <span className="mt-1 block font-mono text-[12.5px] text-[#3B454D]">4.8 ★ · open until 01:00 · 300 m</span>
+                <span className="mt-2 flex gap-2"><span className="rounded-md bg-[#E8A22B] px-2.5 py-1 font-mono text-[12.5px]">Call</span><span className="rounded-md border border-[#D8D4CB] px-2.5 py-1 font-mono text-[12.5px]">Directions</span></span>
               </span>
             </div>
             <p className="absolute bottom-5 left-[22px] font-mono text-[12.5px] uppercase tracking-[0.06em] text-[#F5F2EC]/55">The map result · you first, competitors grey</p>
@@ -155,7 +190,8 @@ function DemoShowcase() {
 function CapabilitySection({ onNavigate }: { onNavigate: (page: PageKey) => void }) {
   const [active, setActive] = useState(0);
   const item = capabilities[active];
-  const positions = [[50, 5], [86, 29], [86, 71], [50, 95], [14, 71], [14, 29]];
+  const positions = [[50, 8], [86.4, 29], [86.4, 71], [50, 92], [13.6, 71], [13.6, 29]];
+  const durations = [7, 8, 9, 7.5, 8.5, 9.5];
   return (
     <section className="reveal bg-[#0E1317] text-[#F5F2EC]">
       <div className="mx-auto grid max-w-[1200px] grid-cols-1 items-center gap-10 px-5 py-[clamp(56px,8vw,112px)] sm:px-8 lg:grid-cols-2 lg:gap-16 lg:px-12">
@@ -164,10 +200,18 @@ function CapabilitySection({ onNavigate }: { onNavigate: (page: PageKey) => void
           <div className="mt-8 min-h-[190px] border-l-[3px] bg-white/[0.04] p-6" style={{ borderColor: item.color }}><p className="font-mono text-[12.5px] uppercase tracking-[0.06em]" style={{ color: item.color }}>{item.kicker}</p><h3 className="mt-2 font-display text-[25px] font-medium">{item.title}</h3><p className="mt-2.5 text-sm leading-[1.6] text-white/80">{item.desc}</p></div>
           <button onClick={() => onNavigate("services")} className="mt-6 cursor-pointer border-0 bg-transparent p-0 font-medium text-[#E8A22B]">Everything we do, in detail</button>
         </div>
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:relative lg:aspect-square lg:w-full">
-          <div className="pointer-events-none absolute inset-[13%] hidden rounded-full border border-dashed border-white/10 lg:block" />
-          <div className="pointer-events-none absolute inset-[28%] hidden animate-[lum-spin_90s_linear_infinite] rounded-full border border-white/10 lg:block" />
-          {capabilities.map((capability, index) => <button key={capability.title} onMouseEnter={() => setActive(index)} onFocus={() => setActive(index)} onClick={() => onNavigate("services")} className="flex min-h-[92px] cursor-pointer flex-col items-center justify-center rounded-[14px] border bg-[#151B20] p-2 text-center text-sm font-medium text-white transition hover:-translate-y-1 lg:absolute lg:w-28 lg:-translate-x-1/2 lg:-translate-y-1/2" style={{ borderColor: `${capability.color}66`, color: "#F5F2EC", left: `${positions[index][0]}%`, top: `${positions[index][1]}%` }}><Icon name={capability.icon} className="text-[24px]" /><span className="mt-1.5">{capability.title}</span></button>)}
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:relative lg:mx-auto lg:aspect-square lg:w-[min(100%,440px)] lg:grid-cols-none">
+          <svg viewBox="0 0 100 100" aria-hidden="true" className="pointer-events-none absolute inset-0 hidden h-full w-full lg:block">
+            <g className="origin-center animate-[lum-spin_90s_linear_infinite]">
+              <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(245,242,236,0.14)" strokeWidth="0.25" strokeDasharray="1.6 2.4" />
+              <circle cx="50" cy="50" r="30" fill="none" stroke="rgba(245,242,236,0.08)" strokeWidth="0.25" />
+            </g>
+          </svg>
+          <svg viewBox="0 0 100 100" aria-hidden="true" className="pointer-events-none absolute inset-0 hidden h-full w-full lg:block">
+            {positions.map(([x, y], index) => <line key={`${x}-${y}`} x1="50" y1="50" x2={x} y2={y} stroke={`${capabilities[index].color}${active === index ? "88" : "47"}`} strokeWidth={active === index ? "0.5" : "0.3"} className="transition-all duration-300" />)}
+          </svg>
+          <div className="pointer-events-none absolute left-1/2 top-1/2 hidden aspect-square w-[34%] -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-white/10 bg-[#151B20] lg:grid"><Logo compact inverse /></div>
+          {capabilities.map((capability, index) => <button key={capability.title} onMouseEnter={() => setActive(index)} onFocus={() => setActive(index)} onClick={() => onNavigate("services")} className={`capability-orbit flex min-h-[92px] cursor-pointer flex-col items-center justify-center rounded-[14px] border bg-[#151B20] p-2 text-center text-sm font-medium text-[#F5F2EC] transition-[border-color,background,box-shadow] duration-200 lg:absolute lg:w-28 lg:-translate-x-1/2 lg:-translate-y-1/2 ${active === index ? "shadow-[0_0_0_3px_rgba(245,242,236,0.04)]" : ""}`} style={{ borderColor: active === index ? capability.color : `${capability.color}73`, background: active === index ? `${capability.color}24` : "#151B20", left: `${positions[index][0]}%`, top: `${positions[index][1]}%`, animationDuration: `${durations[index]}s` }}><Icon name={capability.icon} className="text-[24px]" /><span className="mt-1.5">{capability.title}</span></button>)}
         </div>
       </div>
     </section>
@@ -181,29 +225,39 @@ function PackagePreview({ region, onRegion, onNavigate }: Props) {
       <div className="mx-auto max-w-[1200px] px-5 py-[clamp(56px,8vw,112px)] sm:px-8 lg:px-12">
         <div className="flex flex-wrap items-end justify-between gap-5"><SectionHeading kicker="Packages" title="One build fee. Then the plan that keeps you found." /><div className="flex gap-1.5 rounded-full border border-line p-1">{(["eu", "balkans"] as RegionKey[]).map((item) => <button key={item} onClick={() => onRegion(item)} className={`min-h-10 cursor-pointer rounded-full border-0 px-4 font-mono text-[12.5px] uppercase tracking-[0.06em] ${region === item ? "bg-amber text-on-amber" : "bg-transparent text-muted"}`}>{item === "eu" ? "EU list" : "Balkans list"}</button>)}</div></div>
         <p className="mb-10 mt-3 font-mono text-[12.5px] text-muted">Hover a tier to see what is in it.</p>
-        <div className="grid grid-cols-1 items-start gap-5 md:grid-cols-3">{tierDefinitions.map((tier) => <article key={tier.name} className={`cut-card card-lift relative overflow-hidden rounded-[18px] border p-7 ${tier.recommended ? "border-amber/35 bg-[#0E1317] text-[#F5F2EC]" : "border-line bg-page text-ink"}`}><div className="flex items-center gap-2.5"><Icon name={tier.icon} className={tier.recommended ? "text-[#E8A22B]" : "text-amber-text"} /><h3 className="font-display text-[25px] font-medium">{tier.name}</h3>{tier.recommended && <span className="ml-auto rounded-full bg-amber px-2.5 py-1 font-mono text-xs uppercase text-on-amber">Pick this</span>}</div><p className="mt-[22px] flex items-baseline gap-2"><span className="font-mono text-[12.5px] opacity-70">{tier.prefix}</span><span className="font-mono text-[clamp(34px,4.4vw,49px)] leading-none">{money(prices[tier.key][region])}</span></p><p className="mb-[22px] mt-2 font-mono text-[12.5px] uppercase tracking-[0.06em] opacity-65">{tier.key === "custom" ? "quoted per project" : `then Care from ${money(prices.care[region])} / month`}</p><div className={tier.recommended ? "text-[#E8A22B]" : "text-amber-text"}><CheckList items={tier.items.slice(0, 3)} compact /></div><button onClick={() => onNavigate("packages")} className="mt-6 flex cursor-pointer items-center gap-2 border-0 bg-transparent p-0 font-medium" style={{ color: tier.recommended ? "#E8A22B" : "var(--accent-text)" }}>{tier.cta}<Icon name="arrow_forward" className="text-[18px]" /></button></article>)}</div>
-        <div className="mt-5 grid grid-cols-1 gap-5 md:grid-cols-2">{plans.map((plan) => <div key={plan.name} className="cut-card-reverse flex flex-wrap items-center gap-4 rounded-[18px] border border-line bg-page px-6 py-[22px]"><Icon name={plan.icon} className="text-[26px] text-amber-text" /><span className="flex-1"><span className="block font-display text-xl font-medium">{plan.name}</span><span className="mt-1 block text-sm text-muted">{plan.summary}</span></span><span className="font-mono text-xl">{money(prices[plan.key][region])} / mo</span></div>)}</div>
+        <div className="grid grid-cols-1 items-start gap-5 md:grid-cols-3">{tierDefinitions.map((tier) => <article key={tier.name} className={`cut-card card-lift relative overflow-hidden rounded-[18px] border p-7 ${tier.recommended ? "border-amber/35 bg-[#0E1317] text-[#F5F2EC]" : "border-line bg-page text-ink"}`}><div className="flex items-center gap-2.5"><Icon name={tier.icon} className={tier.recommended ? "text-[#E8A22B]" : "text-amber-text"} /><h3 className="font-display text-[25px] font-medium">{tier.name}</h3>{tier.recommended && <span className="ml-auto rounded-full bg-amber px-2.5 py-1 font-mono text-xs uppercase text-on-amber">Pick this</span>}</div><p className="mt-[22px] flex items-baseline gap-2"><span className="font-mono text-[12.5px] opacity-70">{tier.prefix}</span><span className="font-mono text-[clamp(34px,4.4vw,49px)] leading-none">€<AnimatedNumber value={prices[tier.key][region]} /></span></p><p className="mb-[22px] mt-2 font-mono text-[12.5px] uppercase tracking-[0.06em] opacity-65">{tier.key === "custom" ? "quoted per project" : `then Care from ${money(prices.care[region])} / month`}</p><p className="text-sm leading-[1.55] opacity-80">{tier.who}</p><div className={`mt-[18px] ${tier.recommended ? "text-[#E8A22B]" : "text-amber-text"}`}><CheckList items={tier.items.slice(0, 3)} compact /></div><button onClick={() => onNavigate("packages")} className="mt-6 flex cursor-pointer items-center gap-2 border-0 bg-transparent p-0 font-medium" style={{ color: tier.recommended ? "#E8A22B" : "var(--accent-text)" }}>{tier.cta}<Icon name="arrow_forward" className="text-[18px]" /></button></article>)}</div>
+        <div className="mt-5 grid grid-cols-1 gap-5 md:grid-cols-2">{plans.map((plan) => <div key={plan.name} className="cut-card-reverse flex flex-wrap items-center gap-4 rounded-[18px] border border-line bg-page px-6 py-[22px]"><Icon name={plan.icon} className="text-[26px] text-amber-text" /><span className="flex-1"><span className="block font-display text-xl font-medium">{plan.name}</span><span className="mt-1 block text-sm text-muted">{plan.summary}</span></span><span className="whitespace-nowrap font-mono text-xl">€<AnimatedNumber value={prices[plan.key][region]} /> / mo</span></div>)}</div>
       </div>
     </section>
   );
 }
 
 function ExperienceOrbit({ onNavigate }: { onNavigate: (page: PageKey) => void }) {
+  const positioned = orbitItems.map((item, index) => {
+    const inner = index < 6;
+    const orbitIndex = inner ? index : index - 6;
+    const total = inner ? 6 : 10;
+    const radius = inner ? 25 : 45;
+    const offset = inner ? -Math.PI / 2 : -Math.PI / 2 + Math.PI / 10;
+    const angle = (orbitIndex / total) * Math.PI * 2 + offset;
+    return { ...item, inner, left: 50 + Math.cos(angle) * radius * 1.18, top: 50 + Math.sin(angle) * radius };
+  });
   return (
     <section className="reveal overflow-hidden bg-[#0E1317] text-[#F5F2EC]">
       <div className="mx-auto max-w-[1200px] px-5 py-[clamp(56px,8vw,112px)] sm:px-8 lg:px-12">
         <SectionHeading inverse kicker="Ten years, mapped" title="Everything we have shipped, orbiting one team." body="Nearer the centre is what we do most weeks. Further out is work we have done and would take again. Hover any of them." />
-        <div className="mt-8 grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:relative lg:min-h-[580px] lg:block">
-          <div className="pointer-events-none absolute left-1/2 top-1/2 hidden aspect-square w-[min(96%,760px)] -translate-x-1/2 -translate-y-1/2 animate-[lum-spin_120s_linear_infinite] rounded-full border border-dashed border-white/10 lg:block" />
-          <div className="pointer-events-none absolute left-1/2 top-1/2 hidden aspect-square w-[420px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-amber/15 lg:block" />
-          <div className="absolute left-1/2 top-1/2 z-[2] hidden h-32 w-32 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-amber/45 bg-[#151B20] shadow-[0_0_0_16px_rgba(232,162,43,0.05)] lg:grid"><span className="text-center"><span className="block font-mono text-[31px] leading-none text-[#E8A22B]">10</span><span className="font-mono text-[12.5px] uppercase tracking-[0.06em] text-white/60">years</span></span></div>
-          {orbitItems.map((item, index) => {
-            const radius = index < 6 ? 26 : 43;
-            const angle = (index / (index < 6 ? 6 : 10)) * Math.PI * 2 + (index < 6 ? -Math.PI / 2 : Math.PI / 10);
-            const left = 50 + Math.cos(angle) * radius * 1.05;
-            const top = 50 + Math.sin(angle) * radius;
-            return <button key={item.label} onClick={() => onNavigate(index % 3 === 0 ? "work" : "services")} className="flex min-h-[52px] cursor-pointer items-center gap-2 rounded-xl border bg-[#151B20] p-3 text-left text-sm text-white/80 transition hover:bg-[#20272E] hover:text-white lg:absolute lg:min-h-0 lg:-translate-x-1/2 lg:-translate-y-1/2 lg:whitespace-nowrap lg:rounded-full lg:px-[15px] lg:py-2.5" style={{ borderColor: `${item.color}55`, left: `${left}%`, top: `${top}%`, animation: `lum-float ${7 + (index % 4)}s ease-in-out ${(index % 5) * 0.4}s infinite` }}><Icon name={item.icon} className="text-[19px]" /><span>{item.label}</span></button>;
-          })}
+        <div className="mt-8 grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:relative lg:min-h-[clamp(480px,50vw,620px)] lg:block lg:overflow-hidden">
+          <div className="pointer-events-none absolute left-1/2 top-1/2 hidden aspect-square w-[min(96%,760px)] -translate-x-1/2 -translate-y-1/2 lg:block">
+            <svg viewBox="0 0 100 100" aria-hidden="true" className="absolute inset-0 h-full w-full">
+              <g className="origin-center animate-[lum-spin_120s_linear_infinite]"><circle cx="50" cy="50" r="46" fill="none" stroke="rgba(245,242,236,0.07)" strokeWidth="0.2" strokeDasharray="1.4 3" /><circle cx="50" cy="50" r="33" fill="none" stroke="rgba(232,162,43,0.12)" strokeWidth="0.2" strokeDasharray="0.8 4" /></g>
+              <g className="origin-center animate-[lum-spin-reverse_70s_linear_infinite]"><circle cx="50" cy="50" r="20" fill="none" stroke="rgba(245,242,236,0.09)" strokeWidth="0.2" strokeDasharray="2 5" /></g>
+              <circle cx="50" cy="50" r="24" fill="none" stroke="rgba(232,162,43,0.14)" strokeWidth="0.15" /><circle cx="50" cy="50" r="42" fill="none" stroke="rgba(232,162,43,0.08)" strokeWidth="0.15" />
+            </svg>
+            <div className="absolute left-1/2 top-1/2 aspect-square w-[56%] -translate-x-1/2 -translate-y-1/2 animate-[lum-breathe_9s_ease-in-out_infinite] rounded-full bg-[radial-gradient(closest-side,rgba(232,162,43,0.12),rgba(232,162,43,0))]" />
+          </div>
+          <div className="pointer-events-none absolute inset-y-0 left-[clamp(120px,13vw,190px)] right-[clamp(120px,13vw,190px)] hidden lg:block"><svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" className="absolute inset-0 h-full w-full overflow-visible">{positioned.map((item) => <line key={item.label} x1="50" y1="50" x2={item.left} y2={item.top} stroke={`${item.color}${item.inner ? "66" : "33"}`} strokeWidth={item.inner ? "0.3" : "0.16"} vectorEffect="non-scaling-stroke" />)}</svg></div>
+          <div className="absolute left-1/2 top-1/2 z-[2] hidden h-32 w-32 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-amber/45 bg-[#151B20] shadow-[0_0_0_16px_rgba(232,162,43,0.05)] lg:grid"><span className="text-center"><span className="block font-mono text-[31px] leading-none text-[#E8A22B]"><AnimatedNumber value={10} /></span><span className="font-mono text-[12.5px] uppercase tracking-[0.06em] text-white/60">years</span></span></div>
+          <div className="col-span-full grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:absolute lg:inset-y-0 lg:left-[clamp(120px,13vw,190px)] lg:right-[clamp(120px,13vw,190px)] lg:block">{positioned.map((item, index) => <button key={item.label} onClick={() => onNavigate(index % 3 === 0 ? "work" : "services")} className={`experience-node flex min-h-[52px] cursor-pointer items-center gap-2 rounded-xl border bg-[#151B20] p-3 text-left text-sm transition hover:bg-[#20272E] hover:text-white lg:absolute lg:min-h-0 lg:-translate-x-1/2 lg:-translate-y-1/2 lg:whitespace-nowrap lg:rounded-full lg:px-[15px] lg:py-2.5 ${item.inner ? "text-white/95" : "text-white/70"}`} style={{ borderColor: `${item.color}55`, left: `${item.left}%`, top: `${item.top}%`, animationDuration: `${7 + (index % 4)}s`, animationDelay: `${(index % 5) * 0.4}s` }}><Icon name={item.icon} className={item.inner ? "text-xl" : "text-lg"} /><span>{item.label}</span></button>)}</div>
         </div>
       </div>
     </section>

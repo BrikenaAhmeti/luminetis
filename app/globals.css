@@ -192,6 +192,10 @@ a {
   to { transform: rotate(360deg); }
 }
 
+@keyframes lum-spin-reverse {
+  to { transform: rotate(-360deg); }
+}
+
 @keyframes lum-float {
   0%, 100% { transform: translate(-50%, -50%); }
   50% { transform: translate(-50%, calc(-50% - 6px)); }
@@ -229,6 +233,74 @@ a {
 @keyframes drop-in {
   from { opacity: 0; transform: translateY(-70px); }
   to { opacity: 1; transform: none; }
+}
+
+.metric-line {
+  stroke-dasharray: 420;
+  stroke-dashoffset: 420;
+  transition: stroke-dashoffset 1900ms ease-out;
+}
+
+.metric-line.is-active {
+  stroke-dashoffset: 0;
+}
+
+.metric-pin,
+.metric-message,
+.metric-call,
+.metric-map-pin {
+  opacity: 0;
+  transition: opacity 520ms ease-out, transform 640ms cubic-bezier(0.2, 1.2, 0.4, 1);
+}
+
+.metric-pin,
+.metric-message {
+  transform: translateY(18px);
+}
+
+.metric-call {
+  transform: translateX(-14px);
+}
+
+.metric-map-pin {
+  transform: translateY(-70px);
+  transition-duration: 520ms, 760ms;
+  transition-timing-function: ease-out, cubic-bezier(0.2, 1.5, 0.4, 1);
+}
+
+.metric-pin.is-active,
+.metric-message.is-active,
+.metric-call.is-active,
+.metric-map-pin.is-active {
+  opacity: 1;
+  transform: none;
+}
+
+.metric-bar {
+  transform: scaleY(0.04);
+  transition: transform 900ms cubic-bezier(0.16, 0.84, 0.28, 1);
+}
+
+.metric-bar.is-active {
+  transform: scaleY(1);
+}
+
+.metric-growth {
+  transition: width 1500ms cubic-bezier(0.16, 0.84, 0.28, 1);
+}
+
+.capability-orbit,
+.experience-node {
+  animation-name: lum-float;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+@media (max-width: 1023px) {
+  .capability-orbit,
+  .experience-node {
+    animation: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

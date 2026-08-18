@@ -1,6 +1,7 @@
 "use client";
 
 import type { PageKey } from "../data/site";
+import { AnimatedNumber } from "./AnimatedNumber";
 import { Icon } from "./Icon";
 
 type ActionProps = {
@@ -53,10 +54,12 @@ export function SectionHeading({ kicker, title, body, inverse = false }: { kicke
   );
 }
 
-export function Stat({ value, label, inverse = false }: { value: string; label: string; inverse?: boolean }) {
+export function Stat({ value, label, inverse = false }: { value: React.ReactNode; label: string; inverse?: boolean }) {
+  const numeric = typeof value === "string" ? value.match(/^([\d,]+)(.*)$/) : null;
+  const rendered = numeric ? <AnimatedNumber value={Number(numeric[1].replaceAll(",", ""))} suffix={numeric[2]} /> : value;
   return (
     <span>
-      <span className={`block font-mono text-[31px] leading-none ${inverse ? "text-[#E8A22B]" : "text-amber-text"}`}>{value}</span>
+      <span className={`block font-mono text-[31px] leading-none ${inverse ? "text-[#E8A22B]" : "text-amber-text"}`}>{rendered}</span>
       <span className={`mt-1.5 block font-mono text-[12.5px] uppercase tracking-[0.06em] ${inverse ? "text-[#F5F2EC]/60" : "text-muted"}`}>{label}</span>
     </span>
   );

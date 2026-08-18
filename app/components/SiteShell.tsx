@@ -12,6 +12,7 @@ import { ServicesPage } from "./pages/ServicesPage";
 import { WorkPage } from "./pages/WorkPage";
 import { Footer } from "./Footer";
 import { Header } from "./Header";
+import { LocalizedContent } from "./LocalizedContent";
 
 type Theme = "light" | "dark";
 
@@ -106,17 +107,19 @@ export function SiteShell() {
 
   return (
     <div className="flex min-h-screen flex-col bg-page text-ink">
-      <Header page={page} locale={locale} dictionary={dictionary} theme={theme} onNavigate={navigate} onLocale={changeLocale} onTheme={changeTheme} />
-      <main className="flex-1">
-        {page === "home" && <HomePage dictionary={dictionary} region={region} onRegion={setRegion} onNavigate={navigate} />}
-        {page === "services" && <ServicesPage onNavigate={navigate} />}
-        {page === "packages" && <PackagesPage region={region} onRegion={setRegion} onNavigate={navigate} />}
-        {page === "work" && <WorkPage onNavigate={navigate} />}
-        {page === "about" && <AboutPage onNavigate={navigate} />}
-        {page === "commitment" && <CommitmentPage onNavigate={navigate} />}
-        {page === "contact" && <ContactPage />}
-      </main>
-      <Footer dictionary={dictionary} onNavigate={navigate} />
+      <LocalizedContent key={locale} locale={locale}>
+        <Header page={page} locale={locale} dictionary={dictionary} theme={theme} onNavigate={navigate} onLocale={changeLocale} onTheme={changeTheme} />
+        <main className="flex-1">
+          {page === "home" && <HomePage dictionary={dictionary} region={region} onRegion={setRegion} onNavigate={navigate} />}
+          {page === "services" && <ServicesPage onNavigate={navigate} />}
+          {page === "packages" && <PackagesPage region={region} onRegion={setRegion} onNavigate={navigate} />}
+          {page === "work" && <WorkPage onNavigate={navigate} />}
+          {page === "about" && <AboutPage onNavigate={navigate} />}
+          {page === "commitment" && <CommitmentPage onNavigate={navigate} />}
+          {page === "contact" && <ContactPage />}
+        </main>
+        <Footer dictionary={dictionary} onNavigate={navigate} />
+      </LocalizedContent>
     </div>
   );
 }

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { addOns, faqs, plans, prices, tierDefinitions, type PageKey, type RegionKey } from "../../data/site";
+import { AnimatedNumber } from "../AnimatedNumber";
 import { Icon } from "../Icon";
 import { PageHero } from "../PageHero";
 import { Action, CheckList } from "../ui";
@@ -53,7 +54,7 @@ export function PackagesPage({ region, onRegion, onNavigate }: Props) {
                   </div>
                   <p className="mt-6 flex items-baseline gap-2">
                     <span className="font-mono text-[12.5px] opacity-70">{tier.prefix}</span>
-                    <span className="font-mono text-[clamp(34px,4.4vw,49px)] leading-none">{money(value)}</span>
+                    <span className="font-mono text-[clamp(34px,4.4vw,49px)] leading-none">€<AnimatedNumber value={value} /></span>
                   </p>
                   <p className="mb-[22px] mt-2 font-mono text-[12.5px] uppercase tracking-[0.06em] opacity-65">{monthly}</p>
                   <p className="mb-5 text-sm leading-[1.55] opacity-85">{tier.who}</p>
@@ -71,7 +72,7 @@ export function PackagesPage({ region, onRegion, onNavigate }: Props) {
               <div className="flex flex-wrap items-center gap-3.5">
                 <span className="grid h-11 w-11 place-items-center rounded-xl bg-amber/10 text-amber-text"><Icon name={plan.icon} /></span>
                 <h2 className="font-display text-[25px] font-medium">{plan.name}</h2>
-                <span className="ml-auto font-mono text-xl sm:text-[25px]">{money(prices[plan.key][region])} / month</span>
+                <span className="ml-auto whitespace-nowrap font-mono text-xl sm:text-[25px]">€<AnimatedNumber value={prices[plan.key][region]} /> / month</span>
               </div>
               <p className="my-5 text-sm leading-[1.6] text-muted">{plan.summary}</p>
               <ul className="grid list-none p-0">
@@ -86,7 +87,7 @@ export function PackagesPage({ region, onRegion, onNavigate }: Props) {
         <div className="mx-auto grid max-w-[1200px] grid-cols-1 gap-10 px-5 py-[clamp(48px,7vw,88px)] sm:px-8 md:grid-cols-2 lg:px-12">
           <div>
             <h2 className="mb-5 font-display text-[clamp(25px,3vw,31px)] font-medium">Add-ons</h2>
-            {addOns.map((item) => <div key={item.label} className="flex flex-wrap justify-between gap-3 border-t border-line py-3.5 text-sm"><span>{item.label}</span><span className="font-mono text-amber-text">{money(item[region])} {item.unit}</span></div>)}
+            {addOns.map((item) => <div key={item.label} className="flex flex-wrap justify-between gap-3 border-t border-line py-3.5 text-sm"><span>{item.label}</span><span className="font-mono text-amber-text">€<AnimatedNumber value={item[region]} /> {item.unit}</span></div>)}
           </div>
           <div className="grid content-start gap-5">
             <div className="rounded-[18px] border border-line bg-page p-[26px]">
