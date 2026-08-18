@@ -215,7 +215,7 @@ export function HomePage({ dictionary, region, onRegion, onNavigate }: Props) {
     <div>
       <section className="reveal relative overflow-hidden border-b border-amber/35 bg-[#0E1317] text-[#F5F2EC]">
         <QuantumCanvas />
-        <div className="relative mx-auto max-w-[1200px] px-5 py-[clamp(72px,11vw,144px)] sm:px-8 lg:px-12">
+        <div data-no-translate className="relative mx-auto max-w-[1200px] px-5 py-[clamp(72px,11vw,144px)] sm:px-8 lg:px-12">
           <p className="mb-5 font-mono text-[12.5px] uppercase tracking-[0.06em] text-[#E8A22B]">{dictionary.hero.kicker}</p>
           <h1 className="max-w-[20ch] font-display text-[clamp(34px,6.4vw,61px)] font-medium leading-[1.05] tracking-[-0.02em]">{dictionary.hero.title}</h1>
           <p className="mt-7 max-w-[52ch] text-[clamp(16px,1.7vw,20px)] leading-[1.6] text-[#F5F2EC]/80">{dictionary.hero.sub}</p>

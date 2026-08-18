@@ -1,8 +1,8 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { pages, type PageKey, type RegionKey } from "../data/site";
-import { dictionaries, localeCodes, localeFromCountry, resolveLocale, type Locale } from "../i18n/config";
+import { dictionaries, localeFromCountry, matchLocale, type Locale } from "../i18n/config";
 import { AboutPage } from "./pages/AboutPage";
 import { CommitmentPage } from "./pages/CommitmentPage";
 import { ContactPage } from "./pages/ContactPage";
@@ -30,16 +30,20 @@ export function SiteShell({ initialPage = "home" }: { initialPage?: PageKey }) {
   const [locale, setLocale] = useState<Locale>("en");
   const [theme, setTheme] = useState<Theme>("light");
   const [region, setRegion] = useState<RegionKey>("eu");
+  const localeWasChosen = useRef(false);
   const dictionary = useMemo(() => dictionaries[locale], [locale]);
 
   useEffect(() => {
     const currentTheme = document.documentElement.dataset.theme === "dark" ? "dark" : "light";
-    const storedLocale = window.localStorage.getItem("luminetis-locale");
-    const browserLocale = navigator.languages.map(resolveLocale).find((value) => localeCodes.includes(value)) ?? "en";
+    const requestedLocale = matchLocale(new URLSearchParams(window.location.search).get("lang"));
+    const storedLocale = matchLocale(window.localStorage.getItem("luminetis-locale"));
+    const browserLanguages = navigator.languages?.length ? navigator.languages : [navigator.language];
+    const browserLocale = browserLanguages.map(matchLocale).find((value): value is Locale => value !== null) ?? null;
+    if (requestedLocale) window.localStorage.setItem("luminetis-locale", requestedLocale);
     const initialTimer = window.setTimeout(() => {
       setPage(pageFromLocation());
       setTheme(currentTheme);
-      setLocale(storedLocale ? resolveLocale(storedLocale) : browserLocale);
+      setLocale(requestedLocale ?? storedLocale ?? browserLocale ?? "en");
     }, 0);
 
     const detect = async () => {
@@ -47,7 +51,7 @@ export function SiteShell({ initialPage = "home" }: { initialPage?: PageKey }) {
         const response = await fetch("/api/locale", { headers: { Accept: "application/json" } });
         if (!response.ok) return;
         const data = await response.json() as { locale?: string; country?: string | null };
-        if (!storedLocale && !navigator.languages.some((value) => localeCodes.includes(resolveLocale(value)))) setLocale(localeFromCountry(data.country) ?? resolveLocale(data.locale));
+        if (!requestedLocale && !storedLocale && !browserLocale && !localeWasChosen.current) setLocale(localeFromCountry(data.country) ?? matchLocale(data.locale) ?? "en");
         if (["AL", "XK", "KS"].includes(data.country?.toUpperCase() ?? "")) setRegion("balkans");
       } catch {
         const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -91,7 +95,7 @@ export function SiteShell({ initialPage = "home" }: { initialPage?: PageKey }) {
       observer.disconnect();
       window.clearTimeout(timer);
     };
-  }, [page, locale]);
+  }, [page]);
 
   const navigate = useCallback((target: PageKey) => {
     if (target === "privacy" || target === "terms") {
@@ -114,13 +118,18 @@ export function SiteShell({ initialPage = "home" }: { initialPage?: PageKey }) {
   }, []);
 
   const changeLocale = useCallback((value: Locale) => {
+    localeWasChosen.current = true;
     setLocale(value);
     window.localStorage.setItem("luminetis-locale", value);
+    const url = new URL(window.location.href);
+    if (value === "en") url.searchParams.delete("lang");
+    else url.searchParams.set("lang", value);
+    window.history.replaceState(null, "", `${url.pathname}${url.search}${url.hash}`);
   }, []);
 
   return (
     <div className="flex min-h-screen flex-col bg-page text-ink">
-      <LocalizedContent key={locale} locale={locale}>
+      <LocalizedContent locale={locale}>
         <Header page={page} locale={locale} dictionary={dictionary} theme={theme} onNavigate={navigate} onLocale={changeLocale} onTheme={changeTheme} />
         <main className="flex-1">
           {page === "home" && <HomePage dictionary={dictionary} region={region} onRegion={setRegion} onNavigate={navigate} />}

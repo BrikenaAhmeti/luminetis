@@ -185,9 +185,13 @@ export const dictionaries: Record<Locale, Dictionary> = {
 };
 
 export function resolveLocale(value?: string | null): Locale {
-  if (!value) return "en";
+  return matchLocale(value) ?? "en";
+}
+
+export function matchLocale(value?: string | null): Locale | null {
+  if (!value) return null;
   const normalized = value.toLowerCase().split("-")[0];
-  return localeCodes.includes(normalized as Locale) ? (normalized as Locale) : "en";
+  return localeCodes.includes(normalized as Locale) ? (normalized as Locale) : null;
 }
 
 export function localeFromCountry(country?: string | null): Locale | null {
