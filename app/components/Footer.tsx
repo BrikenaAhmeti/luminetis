@@ -27,7 +27,7 @@ export function Footer({ dictionary, onNavigate }: FooterProps) {
             <p className="mb-3 font-mono text-[12.5px] uppercase tracking-[0.06em] opacity-60">{dictionary.footerOffices}</p>
             <p className="mb-2.5 text-sm opacity-85">Luxembourg</p>
             <p className="mb-2.5 text-sm opacity-85">Kosovo</p>
-            <p className="mt-4 font-mono text-[12.5px] opacity-70">hello@luminetis.com</p>
+            <p className="mt-4 font-mono text-[12.5px] opacity-70">info@luminetis.com</p>
           </div>
           <div>
             <p className="mb-3 font-mono text-[12.5px] uppercase tracking-[0.06em] opacity-60">{dictionary.footerLegal}</p>

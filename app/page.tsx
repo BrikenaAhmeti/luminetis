@@ -7,7 +7,7 @@ const organization = {
   url: "https://luminetis.com",
   logo: "https://luminetis.com/logos/logomark-colour.svg",
   description: "Senior engineering studio building fast websites, web applications, local search systems, data platforms, AI services, and infrastructure.",
-  email: "hello@luminetis.com",
+  email: "info@luminetis.com",
   areaServed: ["Luxembourg", "Kosovo", "United Kingdom", "United States", "Europe"],
   address: [
     { "@type": "PostalAddress", addressCountry: "LU", addressLocality: "Luxembourg" },

@@ -76,7 +76,7 @@ export function ContactPage() {
         <div className="grid gap-5">
           <div className="cut-card-reverse rounded-[18px] border border-line bg-card p-[26px]">
             <p className="mb-[18px] font-mono text-[12.5px] uppercase tracking-[0.06em] text-muted">Direct</p>
-            {[{ label: "Email", value: "hello@luminetis.com", icon: "mail" }, { label: "Luxembourg", value: "Number pending", icon: "call" }, { label: "Kosovo", value: "Number pending", icon: "call" }, { label: "First reply", value: "within 8 business hours", icon: "schedule" }].map((row) => (
+            {[{ label: "Email", value: "info@luminetis.com", icon: "mail" }, { label: "Luxembourg", value: "Number pending", icon: "call" }, { label: "Kosovo", value: "Number pending", icon: "call" }, { label: "First reply", value: "within 8 business hours", icon: "schedule" }].map((row) => (
               <div key={row.label} className="flex flex-wrap items-center gap-3.5 border-t border-line py-3.5">
                 <Icon name={row.icon} className="text-[20px] text-amber-text" />
                 <span className="flex-1 text-sm text-muted">{row.label}</span>
