@@ -1,6 +1,7 @@
 import { pages, type PageKey } from "../data/site";
 import type { Dictionary } from "../i18n/config";
 import { Logo } from "./Logo";
+import { SocialLinks } from "./SocialLinks";
 
 type FooterProps = {
   dictionary: Dictionary;
@@ -35,7 +36,7 @@ export function Footer({ dictionary, onNavigate }: FooterProps) {
               <a href="/privacy" className="opacity-80 transition hover:text-[#E8A22B] hover:opacity-100">Privacy notice</a>
               <a href="/terms" className="opacity-80 transition hover:text-[#E8A22B] hover:opacity-100">Terms of service</a>
             </div>
-            <p className="mt-4 font-mono text-[12.5px] leading-7 opacity-60">Social links render only where a real URL exists.</p>
+            <SocialLinks inverse className="mt-5" />
           </div>
         </div>
       </div>

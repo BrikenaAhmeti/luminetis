@@ -1,9 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { FaLinkedinIn } from "react-icons/fa6";
+import { partnerProfiles } from "../../data/contact";
 import { locations } from "../../data/site";
 import { Icon } from "../Icon";
 import { PageHero } from "../PageHero";
+import { SocialLinks } from "../SocialLinks";
 import { LocationCard } from "../ui";
 
 type FormState = { name: string; email: string; company: string; phone: string; interest: string; message: string; consent: boolean };
@@ -76,13 +79,24 @@ export function ContactPage() {
         <div className="grid gap-5">
           <div className="cut-card-reverse rounded-[18px] border border-line bg-card p-[26px]">
             <p className="mb-[18px] font-mono text-[12.5px] uppercase tracking-[0.06em] text-muted">Direct</p>
-            {[{ label: "Email", value: "info@luminetis.com", icon: "mail" }, { label: "Luxembourg", value: "Number pending", icon: "call" }, { label: "Kosovo", value: "Number pending", icon: "call" }, { label: "First reply", value: "within 8 business hours", icon: "schedule" }].map((row) => (
-              <div key={row.label} className="flex flex-wrap items-center gap-3.5 border-t border-line py-3.5">
-                <Icon name={row.icon} className="text-[20px] text-amber-text" />
-                <span className="flex-1 text-sm text-muted">{row.label}</span>
-                <span className="font-mono text-sm">{row.value}</span>
-              </div>
+            <a href="mailto:info@luminetis.com" className="flex flex-wrap items-center gap-3.5 border-t border-line py-3.5 transition hover:text-link">
+              <Icon name="mail" className="text-[20px] text-amber-text" />
+              <span className="flex-1 text-sm text-muted">Email</span>
+              <span className="font-mono text-sm">info@luminetis.com</span>
+            </a>
+            {partnerProfiles.map((partner) => (
+              <a key={partner.name} href={partner.linkedin} target="_blank" rel="noopener noreferrer" className="flex flex-wrap items-center gap-3.5 border-t border-line py-3.5 transition hover:text-link" aria-label={`${partner.name} · LinkedIn`}>
+                <FaLinkedinIn aria-hidden="true" className="text-[20px] text-amber-text" />
+                <span className="flex-1 text-sm text-muted">{partner.name}</span>
+                <span className="font-mono text-sm">LinkedIn</span>
+              </a>
             ))}
+            <div className="flex flex-wrap items-center gap-3.5 border-t border-line py-3.5">
+              <Icon name="schedule" className="text-[20px] text-amber-text" />
+              <span className="flex-1 text-sm text-muted">First reply</span>
+              <span className="font-mono text-sm">within 8 business hours</span>
+            </div>
+            <SocialLinks className="border-t border-line pt-5" />
           </div>
           <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">{locations.slice(0, 2).map((location) => <LocationCard key={location.city} {...location} />)}</div>
           <div className="rounded-[18px] bg-inverse p-6 text-sm leading-[1.65] text-on-inverse">We reply within 8 business hours, usually the same day. Site-down incidents on a care plan are acknowledged within two hours during business hours.</div>

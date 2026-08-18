@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { partnerProfiles } from "../../data/contact";
 import { aboutPoints, locations, type PageKey } from "../../data/site";
 import { AnimatedNumber } from "../AnimatedNumber";
 import { Icon } from "../Icon";
@@ -8,21 +9,6 @@ import { PageHero } from "../PageHero";
 import { LocationCard, Stat } from "../ui";
 
 type Props = { onNavigate: (page: PageKey) => void };
-
-const teamMembers = [
-  {
-    name: "Bajram Sherifi",
-    image: "/team/bajram-sherifi.jpg",
-    imagePosition: "center 42%",
-    linkedin: "https://www.linkedin.com/in/bajram-s-3b1094110?utm_source=share_via&utm_content=profile&utm_medium=member_android",
-  },
-  {
-    name: "Brikena Ahmeti",
-    image: "/team/brikena-ahmeti.jpg",
-    imagePosition: "center 43%",
-    linkedin: "https://www.linkedin.com/in/brikena-ahmeti-120867166",
-  },
-];
 
 export function AboutPage({ onNavigate }: Props) {
   return (
@@ -62,7 +48,7 @@ export function AboutPage({ onNavigate }: Props) {
           <h2 className="font-display text-[clamp(25px,3vw,31px)] font-medium">The team</h2>
           <p className="mb-7 mt-2.5 max-w-[56ch] text-muted">Two of us permanently, and a short list of senior engineers we trust when a project needs more hands. You are told who is working on your project and who to email, always.</p>
           <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
-            {teamMembers.map((member) => (
+            {partnerProfiles.map((member) => (
               <article key={member.name} className="cut-card-reverse overflow-hidden rounded-[18px] border border-line bg-page">
                 <a href={member.linkedin} target="_blank" rel="noopener noreferrer" aria-label={`${member.name} · LinkedIn`} className="group block focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-amber">
                   <div className="relative aspect-[4/3] overflow-hidden bg-card">
