@@ -91,7 +91,7 @@ export function SiteShell({ initialPage = "home" }: { initialPage?: PageKey }) {
       observer.disconnect();
       window.clearTimeout(timer);
     };
-  }, [page]);
+  }, [page, locale]);
 
   const navigate = useCallback((target: PageKey) => {
     if (target === "privacy" || target === "terms") {
