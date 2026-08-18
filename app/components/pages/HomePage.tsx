@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import type { CSSProperties } from "react";
 import { capabilities, locations, mapSteps, orbitItems, plans, prices, processSteps, tierDefinitions, type PageKey, type RegionKey } from "../../data/site";
@@ -7,7 +8,6 @@ import type { Dictionary } from "../../i18n/config";
 import { AnimatedNumber } from "../AnimatedNumber";
 import { DemoShowcase } from "../DemoShowcase";
 import { Icon } from "../Icon";
-import { Logo } from "../Logo";
 import { QuantumCanvas } from "../QuantumCanvas";
 import { Action, CheckList, Kicker, SectionHeading } from "../ui";
 
@@ -137,13 +137,13 @@ function CapabilitySection({ onNavigate }: { onNavigate: (page: PageKey) => void
   const durations = [7, 8, 9, 7.5, 8.5, 9.5];
   return (
     <section className="reveal bg-[#0E1317] text-[#F5F2EC]">
-      <div className="mx-auto grid max-w-[1440px] grid-cols-1 items-center gap-10 px-5 py-[clamp(56px,8vw,112px)] sm:px-8 lg:grid-cols-[minmax(0,1.12fr)_minmax(0,0.88fr)] lg:gap-[clamp(56px,6vw,96px)] lg:px-12">
+      <div className="mx-auto grid max-w-[1200px] grid-cols-1 items-center gap-[clamp(32px,5vw,64px)] px-5 py-[clamp(56px,8vw,112px)] sm:px-8 lg:grid-cols-2 lg:px-12">
         <div>
           <SectionHeading inverse kicker="What we do" title="Six capabilities, one team around them." body="Hover any of the six. The same people scope, build, launch and maintain all of it." />
           <div className="mt-8 min-h-[190px] border-l-[3px] bg-white/[0.04] p-6" style={{ borderColor: item.color }}><p className="font-mono text-[12.5px] uppercase tracking-[0.06em]" style={{ color: item.color }}>{item.kicker}</p><h3 className="mt-2 font-display text-[25px] font-medium">{item.title}</h3><p className="mt-2.5 text-sm leading-[1.6] text-white/80">{item.desc}</p></div>
           <button onClick={() => onNavigate("services")} className="mt-6 cursor-pointer border-0 bg-transparent p-0 font-medium text-[#E8A22B]">Everything we do, in detail</button>
         </div>
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:relative lg:mx-auto lg:aspect-square lg:w-[min(100%,clamp(440px,36vw,520px))] lg:grid-cols-none">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:relative lg:mx-auto lg:aspect-square lg:w-[min(100%,440px)] lg:grid-cols-none">
           <svg viewBox="0 0 100 100" aria-hidden="true" className="pointer-events-none absolute inset-0 hidden h-full w-full lg:block">
             <g className="orbit-spin-forward">
               <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(245,242,236,0.14)" strokeWidth="0.25" strokeDasharray="1.6 2.4" />
@@ -153,8 +153,8 @@ function CapabilitySection({ onNavigate }: { onNavigate: (page: PageKey) => void
           <svg viewBox="0 0 100 100" aria-hidden="true" className="pointer-events-none absolute inset-0 hidden h-full w-full lg:block">
             {positions.map(([x, y], index) => <line key={`${x}-${y}`} x1="50" y1="50" x2={x} y2={y} stroke={`${capabilities[index].color}47`} strokeWidth="0.3" />)}
           </svg>
-          <div className="pointer-events-none absolute left-1/2 top-1/2 hidden aspect-square w-[34%] -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-white/10 bg-[#151B20] lg:grid"><span className="scale-[1.75]"><Logo compact inverse /></span></div>
-          {capabilities.map((capability, index) => <button key={capability.title} onMouseEnter={() => setActive(index)} onFocus={() => setActive(index)} onClick={() => onNavigate("services")} className={`capability-orbit flex min-h-[76px] cursor-pointer flex-col items-center justify-center rounded-[14px] border bg-[#151B20] px-2 py-3 text-center text-sm font-medium text-[#F5F2EC] transition-[border-color,background,box-shadow] duration-200 lg:absolute lg:min-h-0 lg:w-28 lg:-translate-x-1/2 lg:-translate-y-1/2 xl:w-32 xl:px-3 xl:py-4 xl:text-base ${active === index ? "shadow-[0_0_0_3px_rgba(245,242,236,0.04)]" : ""}`} style={{ borderColor: active === index ? capability.color : `${capability.color}73`, background: active === index ? `${capability.color}24` : "#151B20", left: `${positions[index][0]}%`, top: `${positions[index][1]}%`, animationDuration: `${durations[index]}s` }}><Icon name={capability.icon} className="text-[24px] xl:text-[28px]" style={{ color: capability.color }} /><span className="mt-1.5">{capability.title}</span></button>)}
+          <div className="pointer-events-none absolute left-1/2 top-1/2 hidden aspect-square w-[34%] -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-white/10 bg-[#151B20] lg:grid"><Image src="/logos/logomark-colour-reversed.svg" alt="Luminetis" width={114} height={138} className="h-[44%] w-auto" /></div>
+          {capabilities.map((capability, index) => <button key={capability.title} onMouseEnter={() => setActive(index)} onFocus={() => setActive(index)} onClick={() => onNavigate("services")} className="capability-orbit flex min-h-[76px] cursor-pointer flex-col items-center justify-center rounded-[14px] border bg-[#151B20] px-2 py-3 text-center text-sm font-medium text-[#F5F2EC] transition-[border-color,background] duration-200 lg:absolute lg:min-h-0 lg:w-28 lg:-translate-x-1/2 lg:-translate-y-1/2" style={{ borderColor: active === index ? capability.color : `${capability.color}73`, background: active === index ? `${capability.color}24` : "#151B20", left: `${positions[index][0]}%`, top: `${positions[index][1]}%`, animationDuration: `${durations[index]}s` }}><Icon name={capability.icon} className="text-[24px]" style={{ color: capability.color }} /><span className="mt-1.5">{capability.title}</span></button>)}
         </div>
       </div>
     </section>
@@ -189,7 +189,7 @@ function ExperienceOrbit({ onNavigate }: { onNavigate: (page: PageKey) => void }
     <section className="reveal overflow-hidden bg-[#0E1317] text-[#F5F2EC]">
       <div className="mx-auto max-w-[1200px] px-5 py-[clamp(56px,8vw,112px)] sm:px-8 lg:px-12">
         <SectionHeading inverse kicker="Ten years, mapped" title="Everything we have shipped, orbiting one team." body="Nearer the centre is what we do most weeks. Further out is work we have done and would take again. Hover any of them." />
-        <div className="mt-8 grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:relative lg:min-h-[clamp(480px,50vw,620px)] lg:block lg:overflow-hidden">
+        <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:relative lg:min-h-[clamp(480px,50vw,620px)] lg:block lg:overflow-hidden">
           <div className="pointer-events-none absolute left-1/2 top-1/2 hidden aspect-square w-[min(96%,760px)] -translate-x-1/2 -translate-y-1/2 lg:block">
             <svg viewBox="0 0 100 100" aria-hidden="true" className="absolute inset-0 h-full w-full">
               <g className="orbit-spin-slow"><circle cx="50" cy="50" r="46" fill="none" stroke="rgba(245,242,236,0.07)" strokeWidth="0.2" strokeDasharray="1.4 3" /><circle cx="50" cy="50" r="33" fill="none" stroke="rgba(232,162,43,0.12)" strokeWidth="0.2" strokeDasharray="0.8 4" /></g>
@@ -198,9 +198,11 @@ function ExperienceOrbit({ onNavigate }: { onNavigate: (page: PageKey) => void }
             </svg>
             <div className="absolute left-1/2 top-1/2 aspect-square w-[56%] -translate-x-1/2 -translate-y-1/2 animate-[lum-breathe_9s_ease-in-out_infinite] rounded-full bg-[radial-gradient(closest-side,rgba(232,162,43,0.12),rgba(232,162,43,0))]" />
           </div>
-          <div className="pointer-events-none absolute inset-y-0 left-[clamp(120px,13vw,190px)] right-[clamp(120px,13vw,190px)] hidden lg:block"><svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" className="absolute inset-0 h-full w-full overflow-visible">{positioned.map((item) => <line key={item.label} x1="50" y1="50" x2={item.left} y2={item.top} stroke={`${item.color}${item.inner ? "66" : "33"}`} strokeWidth={item.inner ? "0.3" : "0.16"} vectorEffect="non-scaling-stroke" />)}</svg></div>
-          <div className="absolute left-1/2 top-1/2 z-[2] hidden h-32 w-32 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-amber/45 bg-[#151B20] shadow-[0_0_0_16px_rgba(232,162,43,0.05)] lg:grid"><span className="text-center"><span className="block font-mono text-[31px] leading-none text-[#E8A22B]"><AnimatedNumber value={10} /></span><span className="font-mono text-[12.5px] uppercase tracking-[0.06em] text-white/60">years</span></span></div>
-          <div className="col-span-full grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:absolute lg:inset-y-0 lg:left-[clamp(120px,13vw,190px)] lg:right-[clamp(120px,13vw,190px)] lg:block">{positioned.map((item, index) => <button key={item.label} onClick={() => onNavigate(index % 3 === 0 ? "work" : "services")} className={`experience-node flex min-h-[52px] cursor-pointer items-center gap-2 rounded-xl border bg-[#151B20] p-3 text-left text-sm transition hover:bg-[#20272E] hover:text-white lg:absolute lg:min-h-0 lg:-translate-x-1/2 lg:-translate-y-1/2 lg:whitespace-nowrap lg:rounded-full lg:px-[15px] lg:py-2.5 ${item.inner ? "text-white/95" : "text-white/70"}`} style={{ borderColor: `${item.color}55`, left: `${item.left}%`, top: `${item.top}%`, animationDuration: `${7 + (index % 4)}s`, animationDelay: `${(index % 5) * 0.4}s` }}><Icon name={item.icon} className={item.inner ? "text-xl" : "text-lg"} style={{ color: item.color }} /><span>{item.label}</span></button>)}</div>
+          <div className="col-span-full grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:absolute lg:inset-y-0 lg:left-[clamp(120px,13vw,190px)] lg:right-[clamp(120px,13vw,190px)] lg:block">
+            <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" className="pointer-events-none absolute inset-0 hidden h-full w-full overflow-visible lg:block">{positioned.map((item) => <line key={item.label} x1="50" y1="50" x2={item.left} y2={item.top} stroke={`${item.color}${item.inner ? "66" : "33"}`} strokeWidth={item.inner ? "0.3" : "0.16"} vectorEffect="non-scaling-stroke" />)}</svg>
+            <div className="absolute left-1/2 top-1/2 z-[2] hidden h-32 w-32 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-amber/45 bg-[#151B20] shadow-[0_0_0_16px_rgba(232,162,43,0.05)] lg:grid"><span className="text-center"><span className="block font-mono text-[31px] leading-none text-[#E8A22B]"><AnimatedNumber value={10} /></span><span className="font-mono text-[12.5px] uppercase tracking-[0.06em] text-white/60">years</span></span></div>
+            {positioned.map((item, index) => <button key={item.label} onClick={() => onNavigate(index % 3 === 0 ? "work" : "services")} className={`experience-node flex min-h-[52px] cursor-pointer items-center gap-2 rounded-xl border bg-[#151B20] p-3 text-left text-sm transition hover:bg-[#20272E] hover:text-white lg:absolute lg:min-h-0 lg:-translate-x-1/2 lg:-translate-y-1/2 lg:whitespace-nowrap lg:rounded-full lg:px-[15px] lg:py-2.5 ${item.inner ? "text-white/95 lg:text-[15px]" : "text-white/70 lg:text-[13px]"}`} style={{ borderColor: `${item.color}55`, left: `${item.left}%`, top: `${item.top}%`, animationDuration: `${7 + (index % 4)}s`, animationDelay: `${(index % 5) * 0.4}s` }}><Icon name={item.icon} className={item.inner ? "text-xl" : "text-lg"} style={{ color: item.color }} /><span>{item.label}</span></button>)}
+          </div>
         </div>
       </div>
     </section>
