@@ -1,6 +1,6 @@
 # Luminetis
 
-The Luminetis website rebuilt with Next.js-compatible React, TypeScript, Tailwind CSS, responsive layouts, dark and light themes, automatic locale detection, and seven-language i18n.
+The Luminetis website built with Next.js, TypeScript, Tailwind CSS, responsive layouts, dark and light themes, automatic locale detection, and seven-language i18n.
 
 ## Commands
 
@@ -9,7 +9,8 @@ npm install
 npm run dev
 npm run lint
 npm run build
+npm run build:vercel
 npm test
 ```
 
-The development server chooses the next available local port. Production output is generated in `dist`.
+`npm run dev` and `npm run build` use the Sites/Vinext runtime and generate production output in `dist`. `npm run dev:vercel` and `npm run build:vercel` use the native Next.js runtime for Vercel.
