@@ -29,7 +29,7 @@ export const capabilities = [
   { title: "Websites", icon: "language", color: "#E8A22B", kicker: "Websites and web apps", desc: "Marketing sites, custom builds, Shopify and BigCommerce, headless commerce, migrations without losing URLs, and performance work on sites we did not build." },
   { title: "Search and Maps", icon: "location_on", color: "#4FC3B2", kicker: "Being found locally", desc: "Google Business Profile created, claimed and verified, Maps presence, local search, Search Console and indexing, sitemap and structured data, reviews answered." },
   { title: "Mobile and apps", icon: "smartphone", color: "#7FA7E8", kicker: "Mobile and applications", desc: "Native and cross-platform apps, internal tools, dashboards, integrations and API design, usually where a spreadsheet stopped being enough." },
-  { title: "Data and AI", icon: "memory", color: "#C08BE0", kicker: "Data and AI", desc: "Pipelines that fail loudly, warehousing, reporting, extraction, retrieval systems and agents that cite their source or say they do not know." },
+  { title: "Data and AI", icon: "database", color: "#C08BE0", kicker: "Data and AI", desc: "Pipelines that fail loudly, warehousing, reporting, extraction, retrieval systems and agents that cite their source or say they do not know." },
   { title: "Networks", icon: "router", color: "#8FC46B", kicker: "Networks and infrastructure", desc: "Servers, switches, routers, firewalls, on-site network design in Luxembourg and Kosovo, monitoring, backups, hosting and DNS." },
   { title: "Brand and content", icon: "palette", color: "#E88B8B", kicker: "Brand, design and content", desc: "Identity, design systems, UI design, editorial content and product copy, enough design to look like a business people trust." },
 ];

@@ -137,13 +137,13 @@ function CapabilitySection({ onNavigate }: { onNavigate: (page: PageKey) => void
   const durations = [7, 8, 9, 7.5, 8.5, 9.5];
   return (
     <section className="reveal bg-[#0E1317] text-[#F5F2EC]">
-      <div className="mx-auto grid max-w-[1200px] grid-cols-1 items-center gap-10 px-5 py-[clamp(56px,8vw,112px)] sm:px-8 lg:grid-cols-2 lg:gap-16 lg:px-12">
+      <div className="mx-auto grid max-w-[1440px] grid-cols-1 items-center gap-10 px-5 py-[clamp(56px,8vw,112px)] sm:px-8 lg:grid-cols-[minmax(0,1.12fr)_minmax(0,0.88fr)] lg:gap-[clamp(56px,6vw,96px)] lg:px-12">
         <div>
           <SectionHeading inverse kicker="What we do" title="Six capabilities, one team around them." body="Hover any of the six. The same people scope, build, launch and maintain all of it." />
           <div className="mt-8 min-h-[190px] border-l-[3px] bg-white/[0.04] p-6" style={{ borderColor: item.color }}><p className="font-mono text-[12.5px] uppercase tracking-[0.06em]" style={{ color: item.color }}>{item.kicker}</p><h3 className="mt-2 font-display text-[25px] font-medium">{item.title}</h3><p className="mt-2.5 text-sm leading-[1.6] text-white/80">{item.desc}</p></div>
           <button onClick={() => onNavigate("services")} className="mt-6 cursor-pointer border-0 bg-transparent p-0 font-medium text-[#E8A22B]">Everything we do, in detail</button>
         </div>
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:relative lg:mx-auto lg:aspect-square lg:w-[min(100%,440px)] lg:grid-cols-none">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:relative lg:mx-auto lg:aspect-square lg:w-[min(100%,clamp(440px,36vw,520px))] lg:grid-cols-none">
           <svg viewBox="0 0 100 100" aria-hidden="true" className="pointer-events-none absolute inset-0 hidden h-full w-full lg:block">
             <g className="orbit-spin-forward">
               <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(245,242,236,0.14)" strokeWidth="0.25" strokeDasharray="1.6 2.4" />
@@ -153,8 +153,8 @@ function CapabilitySection({ onNavigate }: { onNavigate: (page: PageKey) => void
           <svg viewBox="0 0 100 100" aria-hidden="true" className="pointer-events-none absolute inset-0 hidden h-full w-full lg:block">
             {positions.map(([x, y], index) => <line key={`${x}-${y}`} x1="50" y1="50" x2={x} y2={y} stroke={`${capabilities[index].color}47`} strokeWidth="0.3" />)}
           </svg>
-          <div className="pointer-events-none absolute left-1/2 top-1/2 hidden aspect-square w-[34%] -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-white/10 bg-[#151B20] lg:grid"><span className="scale-[1.45]"><Logo compact inverse /></span></div>
-          {capabilities.map((capability, index) => <button key={capability.title} onMouseEnter={() => setActive(index)} onFocus={() => setActive(index)} onClick={() => onNavigate("services")} className={`capability-orbit flex min-h-[76px] cursor-pointer flex-col items-center justify-center rounded-[14px] border bg-[#151B20] px-2 py-3 text-center text-sm font-medium text-[#F5F2EC] transition-[border-color,background,box-shadow] duration-200 lg:absolute lg:min-h-0 lg:w-28 lg:-translate-x-1/2 lg:-translate-y-1/2 ${active === index ? "shadow-[0_0_0_3px_rgba(245,242,236,0.04)]" : ""}`} style={{ borderColor: active === index ? capability.color : `${capability.color}73`, background: active === index ? `${capability.color}24` : "#151B20", left: `${positions[index][0]}%`, top: `${positions[index][1]}%`, animationDuration: `${durations[index]}s` }}><Icon name={capability.icon} className="text-[24px]" style={{ color: capability.color }} /><span className="mt-1.5">{capability.title}</span></button>)}
+          <div className="pointer-events-none absolute left-1/2 top-1/2 hidden aspect-square w-[34%] -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-white/10 bg-[#151B20] lg:grid"><span className="scale-[1.75]"><Logo compact inverse /></span></div>
+          {capabilities.map((capability, index) => <button key={capability.title} onMouseEnter={() => setActive(index)} onFocus={() => setActive(index)} onClick={() => onNavigate("services")} className={`capability-orbit flex min-h-[76px] cursor-pointer flex-col items-center justify-center rounded-[14px] border bg-[#151B20] px-2 py-3 text-center text-sm font-medium text-[#F5F2EC] transition-[border-color,background,box-shadow] duration-200 lg:absolute lg:min-h-0 lg:w-28 lg:-translate-x-1/2 lg:-translate-y-1/2 xl:w-32 xl:px-3 xl:py-4 xl:text-base ${active === index ? "shadow-[0_0_0_3px_rgba(245,242,236,0.04)]" : ""}`} style={{ borderColor: active === index ? capability.color : `${capability.color}73`, background: active === index ? `${capability.color}24` : "#151B20", left: `${positions[index][0]}%`, top: `${positions[index][1]}%`, animationDuration: `${durations[index]}s` }}><Icon name={capability.icon} className="text-[24px] xl:text-[28px]" style={{ color: capability.color }} /><span className="mt-1.5">{capability.title}</span></button>)}
         </div>
       </div>
     </section>
