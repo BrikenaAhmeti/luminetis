@@ -13,4 +13,5 @@ npm run build:vercel
 npm test
 ```
 
-`npm run dev` and `npm run build` use the Sites/Vinext runtime and generate production output in `dist`. `npm run dev:vercel` and `npm run build:vercel` use the native Next.js runtime for Vercel.
+
+The development server chooses the next available local port. Production output is generated in `dist`.
