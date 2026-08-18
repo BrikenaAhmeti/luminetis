@@ -8,6 +8,7 @@ import { CommitmentPage } from "./pages/CommitmentPage";
 import { ContactPage } from "./pages/ContactPage";
 import { HomePage } from "./pages/HomePage";
 import { PackagesPage } from "./pages/PackagesPage";
+import { PrivacyPage, TermsPage } from "./pages/LegalPages";
 import { ServicesPage } from "./pages/ServicesPage";
 import { WorkPage } from "./pages/WorkPage";
 import { Footer } from "./Footer";
@@ -16,14 +17,16 @@ import { LocalizedContent } from "./LocalizedContent";
 
 type Theme = "light" | "dark";
 
-function pageFromHash(): PageKey {
+function pageFromLocation(): PageKey {
   if (typeof window === "undefined") return "home";
-  const value = window.location.hash.replace("#", "") as PageKey;
-  return pages.includes(value) ? value : "home";
+  if (window.location.pathname === "/privacy") return "privacy";
+  if (window.location.pathname === "/terms") return "terms";
+  const value = window.location.hash.replace("#", "");
+  return pages.find((item) => item === value) ?? "home";
 }
 
-export function SiteShell() {
-  const [page, setPage] = useState<PageKey>("home");
+export function SiteShell({ initialPage = "home" }: { initialPage?: PageKey }) {
+  const [page, setPage] = useState<PageKey>(initialPage);
   const [locale, setLocale] = useState<Locale>("en");
   const [theme, setTheme] = useState<Theme>("light");
   const [region, setRegion] = useState<RegionKey>("eu");
@@ -34,7 +37,7 @@ export function SiteShell() {
     const storedLocale = window.localStorage.getItem("luminetis-locale");
     const browserLocale = navigator.languages.map(resolveLocale).find((value) => localeCodes.includes(value)) ?? "en";
     const initialTimer = window.setTimeout(() => {
-      setPage(pageFromHash());
+      setPage(pageFromLocation());
       setTheme(currentTheme);
       setLocale(storedLocale ? resolveLocale(storedLocale) : browserLocale);
     }, 0);
@@ -53,11 +56,13 @@ export function SiteShell() {
     };
 
     void detect();
-    const onHash = () => setPage(pageFromHash());
-    window.addEventListener("hashchange", onHash);
+    const onLocation = () => setPage(pageFromLocation());
+    window.addEventListener("hashchange", onLocation);
+    window.addEventListener("popstate", onLocation);
     return () => {
       window.clearTimeout(initialTimer);
-      window.removeEventListener("hashchange", onHash);
+      window.removeEventListener("hashchange", onLocation);
+      window.removeEventListener("popstate", onLocation);
     };
   }, []);
 
@@ -89,8 +94,16 @@ export function SiteShell() {
   }, [page]);
 
   const navigate = useCallback((target: PageKey) => {
+    if (target === "privacy" || target === "terms") {
+      window.location.assign(`/${target}`);
+      return;
+    }
+    if (window.location.pathname !== "/") {
+      window.location.assign(target === "home" ? "/" : `/#${target}`);
+      return;
+    }
     setPage(target);
-    window.history.pushState(null, "", target === "home" ? `${window.location.pathname}${window.location.search}` : `#${target}`);
+    window.history.pushState(null, "", target === "home" ? "/" : `#${target}`);
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
@@ -117,6 +130,8 @@ export function SiteShell() {
           {page === "about" && <AboutPage onNavigate={navigate} />}
           {page === "commitment" && <CommitmentPage onNavigate={navigate} />}
           {page === "contact" && <ContactPage />}
+          {page === "privacy" && <PrivacyPage />}
+          {page === "terms" && <TermsPage />}
         </main>
         <Footer dictionary={dictionary} onNavigate={navigate} />
       </LocalizedContent>

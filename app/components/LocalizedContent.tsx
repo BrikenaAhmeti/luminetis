@@ -2,6 +2,7 @@
 
 import { useLayoutEffect, useMemo, useRef } from "react";
 import { generatedTranslations } from "../i18n/generated";
+import { extraTranslations } from "../i18n/extra";
 import type { Locale } from "../i18n/config";
 
 type Props = {
@@ -21,11 +22,11 @@ const translatedFragments: Record<string, Record<string, string>> = {
 
 export function LocalizedContent({ locale, children }: Props) {
   const ref = useRef<HTMLDivElement>(null);
-  const entries = useMemo(() => Object.entries({ ...generatedTranslations[locale], ...translatedFragments[locale] }).filter(([source, target]) => source !== target && source.length >= 4).sort((a, b) => b[0].length - a[0].length), [locale]);
+  const entries = useMemo(() => Object.entries({ ...generatedTranslations[locale], ...extraTranslations[locale], ...translatedFragments[locale] }).filter(([source, target]) => source !== target && source.length >= 4).sort((a, b) => b[0].length - a[0].length), [locale]);
 
   useLayoutEffect(() => {
     const root = ref.current;
-    const dictionary = { ...generatedTranslations[locale], ...translatedFragments[locale] };
+    const dictionary = { ...generatedTranslations[locale], ...extraTranslations[locale], ...translatedFragments[locale] };
     if (!root || !dictionary) return;
 
     const translate = (source: string) => {

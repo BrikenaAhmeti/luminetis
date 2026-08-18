@@ -1,7 +1,9 @@
-export type PageKey = "home" | "services" | "packages" | "work" | "about" | "commitment" | "contact";
+export type PrimaryPageKey = "home" | "services" | "packages" | "work" | "about" | "commitment" | "contact";
+export type LegalPageKey = "privacy" | "terms";
+export type PageKey = PrimaryPageKey | LegalPageKey;
 export type RegionKey = "eu" | "balkans";
 
-export const pages: PageKey[] = ["home", "services", "packages", "work", "about", "commitment", "contact"];
+export const pages: PrimaryPageKey[] = ["home", "services", "packages", "work", "about", "commitment", "contact"];
 
 export const prices = {
   essential: { eu: 149, balkans: 99 },

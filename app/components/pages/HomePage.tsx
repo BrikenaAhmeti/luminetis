@@ -1,9 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { capabilities, demos, locations, mapSteps, orbitItems, plans, prices, processSteps, tierDefinitions, type PageKey, type RegionKey } from "../../data/site";
+import type { CSSProperties } from "react";
+import { capabilities, locations, mapSteps, orbitItems, plans, prices, processSteps, tierDefinitions, type PageKey, type RegionKey } from "../../data/site";
 import type { Dictionary } from "../../i18n/config";
 import { AnimatedNumber } from "../AnimatedNumber";
+import { DemoShowcase } from "../DemoShowcase";
 import { Icon } from "../Icon";
 import { Logo } from "../Logo";
 import { QuantumCanvas } from "../QuantumCanvas";
@@ -26,17 +28,23 @@ const messages = [
 function ResultsSection() {
   const bars = [14, 19, 26, 30, 38, 44, 52, 61, 68, 78, 88, 100];
   const sectionRef = useRef<HTMLElement>(null);
-  const [active, setActive] = useState(false);
 
   useEffect(() => {
     const section = sectionRef.current;
     if (!section) return;
+    const targets = Array.from(section.querySelectorAll(".metric-animate"));
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      targets.forEach((target) => target.classList.add("is-active"));
+      return;
+    }
     const observer = new IntersectionObserver((entries) => {
-      if (!entries[0]?.isIntersecting) return;
-      setActive(true);
-      observer.disconnect();
-    }, { threshold: 0.12 });
-    observer.observe(section);
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("is-active");
+        observer.unobserve(entry.target);
+      });
+    }, { threshold: 0.25 });
+    targets.forEach((target) => observer.observe(target));
     return () => observer.disconnect();
   }, []);
 
@@ -53,7 +61,7 @@ function ResultsSection() {
             <p className="mb-0.5 mt-5 font-mono text-[39px] leading-none"><AnimatedNumber value={3200} /></p>
             <p className="text-[12.5px] text-white/60">followers, from zero</p>
             <svg viewBox="0 0 260 60" preserveAspectRatio="none" aria-hidden="true" className="mt-4 block h-14 w-full overflow-visible">
-              <polyline points="0,54 20,50 40,52 62,44 84,40 106,42 128,31 150,27 172,29 196,18 218,13 240,15 260,4" fill="none" stroke="#E8A22B" strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" className={`metric-line ${active ? "is-active" : ""}`} />
+              <polyline points="0,54 20,50 40,52 62,44 84,40 106,42 128,31 150,27 172,29 196,18 218,13 240,15 260,4" fill="none" stroke="#E8A22B" strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" className="metric-animate metric-line" />
             </svg>
             <div className="mt-3.5 grid grid-cols-3 gap-1.5">{[0, 1, 2].map((item) => <span key={item} className="aspect-square bg-[repeating-linear-gradient(135deg,rgba(245,242,236,0.14)_0_1px,transparent_1px_8px)]" />)}</div>
           </article>
@@ -61,7 +69,7 @@ function ResultsSection() {
           <article className="rounded-2xl border border-white/10 bg-[#151B20] p-[22px]">
             <div className="flex items-center justify-between gap-3"><span className="font-mono text-[12.5px] uppercase tracking-[0.06em] text-white/60">Local search</span><span className="font-mono text-[12.5px] text-[#E8A22B]">position <AnimatedNumber value={1} from={47} /></span></div>
             <div className="mt-[18px] grid gap-2">
-              <div className={`metric-pin flex items-center gap-3 rounded-[10px] border border-[#E8A22B]/50 bg-[#E8A22B]/10 p-3 ${active ? "is-active" : ""}`}><span className="grid h-[26px] w-[26px] shrink-0 place-items-center rounded-full bg-[#E8A22B] font-mono text-[12.5px] text-[#0E1317]">1</span><span><span className="block text-sm font-medium">Your business</span><span className="block font-mono text-[12.5px] text-white/60">4.8 · open now · 300 m</span></span></div>
+              <div className="metric-animate metric-pin metric-search-pin flex items-center gap-3 rounded-[10px] border border-[#E8A22B]/50 bg-[#E8A22B]/10 p-3"><span className="grid h-[26px] w-[26px] shrink-0 place-items-center rounded-full bg-[#E8A22B] font-mono text-[12.5px] text-[#0E1317]">1</span><span><span className="block text-sm font-medium">Your business</span><span className="block font-mono text-[12.5px] text-white/60">4.8 · open now · 300 m</span></span></div>
               {[62, 48, 56, 44].map((width, index) => <div key={width} className="flex items-center gap-3 rounded-[10px] border border-white/10 p-3"><span className="grid h-[26px] w-[26px] shrink-0 place-items-center rounded-full border border-white/15 font-mono text-[12.5px] text-white/50">{index + 2}</span><span className="grid flex-1 gap-1.5"><span className="block h-2 rounded bg-white/15" style={{ width: `${width}%` }} /><span className="block h-2 w-[38%] rounded bg-white/8" /></span></div>)}
             </div>
           </article>
@@ -71,18 +79,18 @@ function ResultsSection() {
               <span className="font-mono text-[12.5px] uppercase tracking-[0.06em] text-[#F5F2EC]/60">Messages</span>
               <span className="rounded-full bg-[#E8A22B] px-2.5 py-0.5 font-mono text-[12.5px] text-[#0E1317]"><AnimatedNumber value={1000} /></span>
             </div>
-            <div className="mt-[18px] grid gap-2.5">{messages.map((message, index) => <div key={message.time} className={`metric-message max-w-[88%] rounded-[14px_14px_14px_4px] bg-white/7 px-3.5 py-3 ${active ? "is-active" : ""}`} style={{ transitionDelay: `${index * 160}ms` }}><p className="text-sm leading-[1.45]">{message.text}</p><p className="mt-1.5 font-mono text-[12.5px] text-[#F5F2EC]/50">{message.time}</p></div>)}</div>
+            <div className="mt-[18px] grid gap-2.5">{messages.map((message, index) => <div key={message.time} className="metric-animate metric-message max-w-[88%] rounded-[14px_14px_14px_4px] bg-white/7 px-3.5 py-3" style={{ transitionDelay: `${index * 160}ms` }}><p className="text-sm leading-[1.45]">{message.text}</p><p className="mt-1.5 font-mono text-[12.5px] text-[#F5F2EC]/50">{message.time}</p></div>)}</div>
           </article>
 
           <article className="rounded-2xl border border-white/10 bg-[#151B20] p-[22px]">
             <div className="flex items-center justify-between gap-3"><span className="font-mono text-[12.5px] uppercase tracking-[0.06em] text-white/60">Calls from Maps</span><span className="font-mono text-xl"><AnimatedNumber value={420} /></span></div>
-            <div className="mt-[18px] grid gap-2.5">{[["+352 621 •• •• ••", "2 min · Maps"], ["+383 44 ••• •••", "5 min · Maps"], ["+352 691 •• •• ••", "1 min · Maps"]].map(([number, detail], index) => <div key={number} className={`metric-call flex items-center gap-3 border-b border-white/10 p-3 ${active ? "is-active" : ""}`} style={{ transitionDelay: `${index * 150}ms` }}><span className="h-2.5 w-2.5 shrink-0 rounded-full bg-[#E8A22B]" /><span className="flex-1 font-mono text-sm">{number}</span><span className="font-mono text-[12.5px] text-white/55">{detail}</span></div>)}</div>
+            <div className="mt-[18px] grid gap-2.5">{[["+352 621 •• •• ••", "2 min · Maps"], ["+383 44 ••• •••", "5 min · Maps"], ["+352 691 •• •• ••", "1 min · Maps"]].map(([number, detail], index) => <div key={number} className="metric-animate metric-call flex items-center gap-3 border-b border-white/10 p-3" style={{ transitionDelay: `${index * 150}ms` }}><span className="h-2.5 w-2.5 shrink-0 rounded-full bg-[#E8A22B]" /><span className="flex-1 font-mono text-sm">{number}</span><span className="font-mono text-[12.5px] text-white/55">{detail}</span></div>)}</div>
             <p className="mt-3 text-[12.5px] leading-[1.5] text-white/55">Tap-to-call from the listing, before anyone opens the site.</p>
           </article>
 
           <article className="rounded-2xl border border-white/10 bg-[#151B20] p-[22px]">
             <div className="flex items-center justify-between gap-3"><span className="font-mono text-[12.5px] uppercase tracking-[0.06em] text-white/60">Website visits</span><span className="font-mono text-xl"><AnimatedNumber value={8400} /></span></div>
-            <div className="mt-5 flex h-[120px] items-end gap-1.5">{bars.map((height, index) => <span key={`${height}-${index}`} className={`metric-bar block flex-1 origin-bottom rounded-t-[3px] ${active ? "is-active" : ""}`} style={{ height: `${height}%`, background: index > 8 ? "#E8A22B" : "rgba(232,162,43,0.45)", transitionDelay: `${index * 60}ms` }} />)}</div>
+            <div className="mt-5 flex h-[120px] items-end gap-1.5">{bars.map((height, index) => <span key={`${height}-${index}`} className="metric-animate metric-bar block flex-1 origin-bottom rounded-t-[3px]" style={{ height: `${height}%`, background: index > 8 ? "#E8A22B" : "rgba(232,162,43,0.45)", transitionDelay: `${index * 60}ms` }} />)}</div>
             <div className="mt-2.5 flex justify-between font-mono text-[12.5px] text-white/50"><span>month 1</span><span>month 12</span></div>
           </article>
 
@@ -90,7 +98,7 @@ function ResultsSection() {
             <span className="font-mono text-[12.5px] uppercase tracking-[0.06em] text-white/60">Google Search impressions</span>
             <p className="mt-[18px] flex items-baseline gap-2"><Icon name="trending_up" className="text-[26px] text-[#8FC46B]" /><span className="font-mono text-[39px] leading-none text-[#8FC46B]">+<AnimatedNumber value={300} suffix="%" /></span></p>
             <p className="mb-5 mt-2.5 text-sm leading-[1.5] text-white/70">People who saw you in search results, month twelve against month one.</p>
-            <div className="grid gap-3">{[["wine bar near me", "1,900 / mo", 92], ["wine bar luxembourg gare", "820 / mo", 62], ["natural wine luxembourg", "410 / mo", 34]].map(([label, value, width]) => <div key={String(label)}><div className="flex justify-between gap-3 font-mono text-[12.5px] text-white/65"><span>{label}</span><span>{value}</span></div><div className="mt-1.5 h-[5px] rounded bg-white/8"><span className={`metric-growth block h-full rounded bg-[#E8A22B] ${active ? "is-active" : ""}`} style={{ width: active ? `${width}%` : "3%" }} /></div></div>)}</div>
+            <div className="grid gap-3">{[["wine bar near me", "1,900 / mo", 92], ["wine bar luxembourg gare", "820 / mo", 62], ["natural wine luxembourg", "410 / mo", 34]].map(([label, value, width]) => <div key={String(label)}><div className="flex justify-between gap-3 font-mono text-[12.5px] text-white/65"><span>{label}</span><span>{value}</span></div><div className="mt-1.5 h-[5px] rounded bg-white/8"><span className="metric-animate metric-growth block h-full rounded bg-[#E8A22B]" style={{ "--metric-width": `${width}%` } as CSSProperties} /></div></div>)}</div>
           </article>
 
           <article className="grain relative min-h-[300px] overflow-hidden rounded-2xl border border-white/10 bg-[#151B20] sm:col-span-2 lg:col-span-3">
@@ -104,7 +112,7 @@ function ResultsSection() {
             </div>
             {[["12%", "34%"], ["74%", "30%"], ["26%", "76%"], ["62%", "84%"], ["86%", "62%"]].map(([left, top]) => <span key={`${left}${top}`} className="absolute h-[7px] w-[7px] rounded-full bg-white/30" style={{ left, top }} />)}
             {[['14%', '38%', 'Café Ost · 3.9'], ['76%', '34%', 'Bar Nord · 4.1'], ['28%', '80%', 'Weinhaus · 4.0']].map(([left, top, name]) => <span key={name} className="absolute font-mono text-[12.5px] text-white/40" style={{ left, top }}>{name}</span>)}
-            <div className={`metric-map-pin absolute left-[44%] top-[52%] ${active ? "is-active" : ""}`}>
+            <div className="metric-animate metric-map-pin absolute left-[44%] top-[52%]">
               <span className="absolute -left-[27px] -top-[27px] h-[72px] w-[72px] animate-[lum-pulse_2600ms_ease-out_infinite] rounded-full border border-[#E8A22B]" />
               <span className="relative block h-[18px] w-[18px] rounded-full bg-[#E8A22B] shadow-[0_4px_14px_rgba(232,162,43,0.28)]" />
               <span className="absolute left-[30px] top-[-16px] whitespace-nowrap rounded-[10px] bg-[#F5F2EC] px-[13px] py-2.5 text-[#0E1317] shadow-xl">
@@ -117,71 +125,6 @@ function ResultsSection() {
           </article>
         </div>
         <p className="mt-6 max-w-[70ch] font-mono text-[12.5px] leading-[1.7] text-[#F5F2EC]/50">Illustrative figures showing the shape of a first year, not a client result. We do not publish numbers we did not measure.</p>
-      </div>
-    </section>
-  );
-}
-
-function DemoFrame({ demo }: { demo: (typeof demos)[number]["key"] }) {
-  if (demo === "boutique") return (
-    <div className="bg-[#EEE8E4] text-[#211C1A]">
-      <div className="flex items-center gap-6 border-b border-black/10 px-[clamp(20px,3vw,40px)] py-[18px]"><span className="font-display text-xl font-medium tracking-[0.18em]">MIRA</span><span className="text-sm text-black/60">New · Collections · Journal</span><span className="ml-auto rounded-full bg-[#211C1A] px-[18px] py-2.5 text-sm text-white">Shop the edit</span></div>
-      <div className="grid grid-cols-1 lg:grid-cols-2">
-        <div className="p-[clamp(28px,4vw,56px)]"><p className="font-mono text-[12.5px] uppercase tracking-[0.08em] text-[#7B4D42]">Made in small runs</p><h3 className="mt-5 max-w-[16ch] font-display text-[clamp(31px,4vw,49px)] leading-[1.02]">Clothes with enough room to live in.</h3><p className="mt-5 max-w-[36ch] text-black/65">Cut in Europe, numbered by hand, and made again only when it sells through.</p></div>
-        <div className="grid min-h-[320px] grid-cols-2 gap-px bg-black/10 p-px">{["checkroom", "apparel", "dry_cleaning", "style"].map((icon, index) => <div key={icon} className="grid place-items-center bg-[#DCD2CC]"><span className="text-center"><Icon name={icon} className="text-5xl text-[#7B4D42]" /><span className="mt-3 block font-mono text-xs">No. {String(index * 3 + 3).padStart(2, "0")}</span></span></div>)}</div>
-      </div>
-    </div>
-  );
-  if (demo === "clinic") return (
-    <div className="bg-[#F4FAF9] text-[#14342F]">
-      <div className="flex items-center gap-6 border-b border-[#0F6E63]/15 px-[clamp(20px,3vw,40px)] py-[18px]"><span className="flex items-center gap-2 font-display text-xl font-medium"><Icon name="local_hospital" className="text-[#0F6E63]" />Clinique Nord</span><span className="ml-auto rounded-lg bg-[#0F6E63] px-[18px] py-2.5 text-sm text-white">Book a visit</span></div>
-      <div className="grid grid-cols-1 gap-6 p-[clamp(28px,4vw,52px)] lg:grid-cols-2"><div><p className="font-mono text-[12.5px] uppercase tracking-[0.08em] text-[#0F6E63]">Open today · 08:00 to 18:00</p><h3 className="mt-5 max-w-[19ch] font-display text-[clamp(31px,4vw,44px)] leading-[1.04]">A doctor, a time, and directions before you need to call.</h3><p className="mt-5 text-[#14342F]/65">General medicine, blood tests and dermatology in French, German and Luxembourgish.</p></div><div className="rounded-2xl border border-[#0F6E63]/20 bg-white p-5"><p className="font-mono text-xs uppercase tracking-wider text-[#0F6E63]">Next appointments</p>{["Today 16:20", "Today 17:05", "Tomorrow 08:00", "Thu 11:45"].map((time) => <div key={time} className="flex justify-between border-b border-[#0F6E63]/10 py-3 text-sm"><span>General consultation</span><span className="font-mono text-[#0F6E63]">{time}</span></div>)}</div></div>
-    </div>
-  );
-  if (demo === "blog") return (
-    <div className="bg-[#FFFDF9] text-[#151312]">
-      <div className="flex items-center gap-7 border-b border-black/10 px-[clamp(20px,3vw,40px)] py-[18px]"><span className="font-display text-[22px] font-medium">Le Courant</span><span className="font-mono text-[12.5px] uppercase tracking-[0.08em] text-black/60">Culture · Food · City</span><span className="ml-auto rounded-lg bg-[#151312] px-[18px] py-2.5 text-sm text-white">Subscribe</span></div>
-      <div className="grid grid-cols-1 gap-8 p-[clamp(28px,4vw,48px)] lg:grid-cols-2"><div><div className="relative grid aspect-[16/10] place-items-center overflow-hidden rounded-xl bg-[#20302B]"><span className="absolute -bottom-[30%] -left-[8%] aspect-square w-[58%] rounded-full bg-[#8FC46B]/30" /><Icon name="agriculture" className="relative text-[clamp(56px,8vw,96px)] text-white/90" /></div><p className="mt-[18px] font-mono text-[12.5px] uppercase tracking-[0.08em] text-[#0F6E63]">Long read · 12 min</p><h3 className="mt-2 max-w-[22ch] font-display text-[clamp(25px,3vw,34px)] leading-[1.1]">The last vineyards on the Moselle bend</h3></div><div className="grid content-start">{[["tram", "Where the tram actually helps"], ["restaurant", "Nine kitchens open past midnight"], ["photo_camera", "A studio inside a water tower"], ["apartment", "What rent looks like in 2026"]].map(([icon, title]) => <div key={title} className="flex gap-3.5 border-t border-black/10 py-4"><span className="grid h-14 w-14 place-items-center rounded-lg bg-[#2C3A34] text-white"><Icon name={icon} /></span><span><span className="font-mono text-[12.5px] uppercase tracking-[0.08em] text-black/50">City</span><span className="mt-1 block font-display text-lg font-medium">{title}</span></span></div>)}</div></div>
-    </div>
-  );
-  if (demo === "shop") return (
-    <div className="bg-[#F6F7F9] text-[#131A22]">
-      <div className="flex items-center gap-6 border-b border-black/10 bg-white px-[clamp(20px,3vw,40px)] py-[18px]"><span className="font-display text-[19px] font-medium">Ferrum Supply</span><span className="hidden flex-1 rounded-full bg-[#F1F3F6] px-3.5 py-2 font-mono text-xs text-black/50 sm:block">Search 4,200 parts</span><span className="ml-auto rounded-lg bg-[#2F6D9E] px-3.5 py-2 text-sm text-white">Bag · 3</span></div>
-      <div className="p-[clamp(24px,4vw,44px)]"><div className="mb-5 flex items-baseline justify-between gap-3"><h3 className="font-display text-[clamp(25px,3vw,31px)] font-medium">Fixings and fasteners</h3><span className="font-mono text-xs text-black/55">4,200 lines · next-day to site</span></div><div className="grid grid-cols-2 gap-3.5 lg:grid-cols-4">{[["hardware", "Hex bolt, M12 × 80", "€0.84"], ["construction", "Anchor sleeve, 10 mm", "€1.20"], ["donut_large", "Washer, DIN 125", "€0.09"], ["straighten", "Threaded rod, 1 m", "€3.40"]].map(([icon, name, value]) => <div key={name} className="overflow-hidden rounded-xl border border-black/10 bg-white"><div className="grid aspect-[4/3] place-items-center bg-[#E7EAEE]"><Icon name={icon} className="text-[52px] text-[#2F6D9E]" /></div><div className="p-3.5"><p className="text-sm font-medium">{name}</p><p className="mt-2 font-mono">{value}</p></div></div>)}</div></div>
-    </div>
-  );
-  if (demo === "auto") return (
-    <div className="bg-[#0A0D10] text-[#EAF0F4]">
-      <div className="flex items-center gap-6 border-b border-white/10 px-[clamp(20px,3vw,40px)] py-[18px]"><span className="flex items-center gap-2 font-display text-[19px] font-medium"><Icon name="local_car_wash" className="text-[#5AC8F5]" />AutoWaxon</span><span className="ml-auto rounded-full bg-[#5AC8F5] px-[18px] py-2.5 text-sm text-[#06212E]">Book a slot</span></div>
-      <div className="relative flex min-h-[340px] flex-col justify-end overflow-hidden p-[clamp(28px,4vw,56px)]"><div className="absolute right-[4%] top-1/2 aspect-square w-[46%] -translate-y-1/2 rounded-full bg-[radial-gradient(closest-side,rgba(90,200,245,0.28),rgba(90,200,245,0))]" /><Icon name="directions_car" className="absolute right-[14%] top-[46%] -translate-y-1/2 text-[clamp(72px,12vw,168px)] text-white/90" /><div className="absolute inset-y-0 w-[22%] animate-[lum-sheen_7s_ease-in-out_infinite] bg-gradient-to-r from-transparent via-white/15 to-transparent" /><p className="relative font-mono text-[12.5px] uppercase tracking-[0.08em] text-[#5AC8F5]">Detailing studio · Luxembourg</p><h3 className="relative mt-4 max-w-[18ch] font-display text-[clamp(31px,4.4vw,49px)] leading-[1.02]">Paint that looks better than the day it left the factory.</h3></div>
-    </div>
-  );
-  if (demo === "agent") return (
-    <div className="bg-[#0C0A14] text-[#EFEBF7]">
-      <div className="flex items-center gap-6 border-b border-white/10 px-[clamp(20px,3vw,40px)] py-[18px]"><span className="flex items-center gap-2 font-display text-[19px] font-medium"><Icon name="smart_toy" className="text-[#C08BE0]" />Orbit Agents</span><span className="ml-auto rounded-lg bg-[#C08BE0] px-[18px] py-2.5 text-sm text-[#170F22]">See a demo</span></div>
-      <div className="grid grid-cols-1 gap-8 p-[clamp(28px,4vw,52px)] lg:grid-cols-2"><div><p className="font-mono text-[12.5px] uppercase tracking-[0.08em] text-[#C08BE0]">AI agents for small teams</p><h3 className="mt-4 max-w-[20ch] font-display text-[clamp(31px,4vw,44px)] leading-[1.04]">An agent that answers, checks stock, and books the job.</h3><p className="mt-4 max-w-[36ch] text-white/70">It reads your catalogue, your calendar and your inbox. When it does not know, it says so and hands over.</p></div><div className="grid gap-3 rounded-2xl border border-white/15 bg-[#140F1E] p-[22px]">{[["Customer", "Do you have the M12 bolt in stock for tomorrow?"], ["Agent", "Yes, 340 in Ettelbruck. Shall I reserve 50?"], ["Customer", "Reserve 50 and send the invoice to accounts."], ["Agent", "Reserved. Invoice sent, delivery Thursday 08:00."]].map(([who, text], index) => <div key={text} className={`max-w-[90%] rounded-[14px] border px-3.5 py-3 text-sm ${index % 2 ? "justify-self-end border-[#C08BE0]/40 bg-[#C08BE0]/15" : "border-white/10 bg-white/[0.06]"}`}><span className="block font-mono text-[12.5px] uppercase tracking-wider text-white/50">{who}</span><span className="mt-1.5 block">{text}</span></div>)}</div></div>
-    </div>
-  );
-  return (
-    <div className="bg-[#FBF7F0] text-[#221A17]">
-      <div className="flex items-center gap-7 border-b border-black/10 px-[clamp(20px,3vw,40px)] py-[18px]"><span className="font-display text-xl font-medium tracking-[0.22em]">VINERA</span><span className="hidden text-sm text-black/65 sm:block">Wine list · Kitchen · Events · Find us</span><span className="ml-auto rounded-full bg-[#7A2233] px-[18px] py-2.5 text-sm text-white">Book a table</span></div>
-      <div className="grid grid-cols-1 lg:grid-cols-2"><div className="p-[clamp(28px,4vw,56px)]"><p className="font-mono text-[12.5px] uppercase tracking-[0.06em] text-[#7A2233]">Open until 01:00 · Luxembourg-Gare</p><h3 className="mt-5 max-w-[18ch] font-display text-[clamp(31px,4vw,49px)] leading-[1.02]">Forty wines by the glass, two streets from the station.</h3><p className="mt-[18px] max-w-[34ch] text-black/70">Small plates until midnight. Walk in, or hold a table for two minutes past closing.</p></div><div className="grid min-h-[300px] content-center gap-px bg-[#7A2233] p-7">{[["Riesling, dry", "Wormeldange", "€7"], ["Pinot noir", "Remich", "€8"], ["Orange, skin contact", "Rahovec", "€9"]].map(([name, place, value]) => <div key={name} className="flex items-center justify-between gap-4 border-b border-white/20 py-4 text-white"><span><span className="font-display text-xl">{name}</span><span className="block text-sm text-white/60">{place}</span></span><span className="font-mono">{value} / glass</span></div>)}</div></div>
-    </div>
-  );
-}
-
-function DemoShowcase() {
-  const [demo, setDemo] = useState<(typeof demos)[number]["key"]>("wine");
-  const active = demos.find((item) => item.key === demo) ?? demos[0];
-  return (
-    <section className="reveal border-y border-line bg-card">
-      <div className="mx-auto max-w-[1200px] px-5 py-[clamp(56px,7vw,96px)] sm:px-8 lg:px-12">
-        <SectionHeading kicker="How it could look" title="Seven directions, drawn for this page." body="Seven directions, invented businesses rather than clients. Switch between them." />
-        <div className="my-7 flex flex-wrap gap-2">{demos.map((item) => <button key={item.key} onClick={() => setDemo(item.key)} className={`min-h-11 cursor-pointer rounded-full border border-line px-[18px] text-sm font-medium ${demo === item.key ? "bg-inverse text-on-inverse" : "bg-transparent text-ink"}`}>{item.label}</button>)}</div>
-        <div className="overflow-hidden rounded-[14px] border border-line shadow-[var(--shadow-md)]">
-          <div className="flex items-center gap-2 border-b border-line bg-page px-4 py-3"><span className="h-[9px] w-[9px] rounded-full bg-line" /><span className="h-[9px] w-[9px] rounded-full bg-line" /><span className="h-[9px] w-[9px] rounded-full bg-line" /><span className="ml-3 rounded-full border border-line bg-card px-3.5 py-1 font-mono text-[12.5px] text-muted">{active.url}</span></div>
-          <DemoFrame demo={demo} />
-        </div>
       </div>
     </section>
   );
@@ -202,16 +145,16 @@ function CapabilitySection({ onNavigate }: { onNavigate: (page: PageKey) => void
         </div>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:relative lg:mx-auto lg:aspect-square lg:w-[min(100%,440px)] lg:grid-cols-none">
           <svg viewBox="0 0 100 100" aria-hidden="true" className="pointer-events-none absolute inset-0 hidden h-full w-full lg:block">
-            <g className="origin-center animate-[lum-spin_90s_linear_infinite]">
+            <g className="orbit-spin-forward">
               <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(245,242,236,0.14)" strokeWidth="0.25" strokeDasharray="1.6 2.4" />
               <circle cx="50" cy="50" r="30" fill="none" stroke="rgba(245,242,236,0.08)" strokeWidth="0.25" />
             </g>
           </svg>
           <svg viewBox="0 0 100 100" aria-hidden="true" className="pointer-events-none absolute inset-0 hidden h-full w-full lg:block">
-            {positions.map(([x, y], index) => <line key={`${x}-${y}`} x1="50" y1="50" x2={x} y2={y} stroke={`${capabilities[index].color}${active === index ? "88" : "47"}`} strokeWidth={active === index ? "0.5" : "0.3"} className="transition-all duration-300" />)}
+            {positions.map(([x, y], index) => <line key={`${x}-${y}`} x1="50" y1="50" x2={x} y2={y} stroke={`${capabilities[index].color}47`} strokeWidth="0.3" />)}
           </svg>
-          <div className="pointer-events-none absolute left-1/2 top-1/2 hidden aspect-square w-[34%] -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-white/10 bg-[#151B20] lg:grid"><Logo compact inverse /></div>
-          {capabilities.map((capability, index) => <button key={capability.title} onMouseEnter={() => setActive(index)} onFocus={() => setActive(index)} onClick={() => onNavigate("services")} className={`capability-orbit flex min-h-[92px] cursor-pointer flex-col items-center justify-center rounded-[14px] border bg-[#151B20] p-2 text-center text-sm font-medium text-[#F5F2EC] transition-[border-color,background,box-shadow] duration-200 lg:absolute lg:w-28 lg:-translate-x-1/2 lg:-translate-y-1/2 ${active === index ? "shadow-[0_0_0_3px_rgba(245,242,236,0.04)]" : ""}`} style={{ borderColor: active === index ? capability.color : `${capability.color}73`, background: active === index ? `${capability.color}24` : "#151B20", left: `${positions[index][0]}%`, top: `${positions[index][1]}%`, animationDuration: `${durations[index]}s` }}><Icon name={capability.icon} className="text-[24px]" /><span className="mt-1.5">{capability.title}</span></button>)}
+          <div className="pointer-events-none absolute left-1/2 top-1/2 hidden aspect-square w-[34%] -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-white/10 bg-[#151B20] lg:grid"><span className="scale-[1.45]"><Logo compact inverse /></span></div>
+          {capabilities.map((capability, index) => <button key={capability.title} onMouseEnter={() => setActive(index)} onFocus={() => setActive(index)} onClick={() => onNavigate("services")} className={`capability-orbit flex min-h-[76px] cursor-pointer flex-col items-center justify-center rounded-[14px] border bg-[#151B20] px-2 py-3 text-center text-sm font-medium text-[#F5F2EC] transition-[border-color,background,box-shadow] duration-200 lg:absolute lg:min-h-0 lg:w-28 lg:-translate-x-1/2 lg:-translate-y-1/2 ${active === index ? "shadow-[0_0_0_3px_rgba(245,242,236,0.04)]" : ""}`} style={{ borderColor: active === index ? capability.color : `${capability.color}73`, background: active === index ? `${capability.color}24` : "#151B20", left: `${positions[index][0]}%`, top: `${positions[index][1]}%`, animationDuration: `${durations[index]}s` }}><Icon name={capability.icon} className="text-[24px]" style={{ color: capability.color }} /><span className="mt-1.5">{capability.title}</span></button>)}
         </div>
       </div>
     </section>
@@ -249,15 +192,15 @@ function ExperienceOrbit({ onNavigate }: { onNavigate: (page: PageKey) => void }
         <div className="mt-8 grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:relative lg:min-h-[clamp(480px,50vw,620px)] lg:block lg:overflow-hidden">
           <div className="pointer-events-none absolute left-1/2 top-1/2 hidden aspect-square w-[min(96%,760px)] -translate-x-1/2 -translate-y-1/2 lg:block">
             <svg viewBox="0 0 100 100" aria-hidden="true" className="absolute inset-0 h-full w-full">
-              <g className="origin-center animate-[lum-spin_120s_linear_infinite]"><circle cx="50" cy="50" r="46" fill="none" stroke="rgba(245,242,236,0.07)" strokeWidth="0.2" strokeDasharray="1.4 3" /><circle cx="50" cy="50" r="33" fill="none" stroke="rgba(232,162,43,0.12)" strokeWidth="0.2" strokeDasharray="0.8 4" /></g>
-              <g className="origin-center animate-[lum-spin-reverse_70s_linear_infinite]"><circle cx="50" cy="50" r="20" fill="none" stroke="rgba(245,242,236,0.09)" strokeWidth="0.2" strokeDasharray="2 5" /></g>
+              <g className="orbit-spin-slow"><circle cx="50" cy="50" r="46" fill="none" stroke="rgba(245,242,236,0.07)" strokeWidth="0.2" strokeDasharray="1.4 3" /><circle cx="50" cy="50" r="33" fill="none" stroke="rgba(232,162,43,0.12)" strokeWidth="0.2" strokeDasharray="0.8 4" /></g>
+              <g className="orbit-spin-reverse"><circle cx="50" cy="50" r="20" fill="none" stroke="rgba(245,242,236,0.09)" strokeWidth="0.2" strokeDasharray="2 5" /></g>
               <circle cx="50" cy="50" r="24" fill="none" stroke="rgba(232,162,43,0.14)" strokeWidth="0.15" /><circle cx="50" cy="50" r="42" fill="none" stroke="rgba(232,162,43,0.08)" strokeWidth="0.15" />
             </svg>
             <div className="absolute left-1/2 top-1/2 aspect-square w-[56%] -translate-x-1/2 -translate-y-1/2 animate-[lum-breathe_9s_ease-in-out_infinite] rounded-full bg-[radial-gradient(closest-side,rgba(232,162,43,0.12),rgba(232,162,43,0))]" />
           </div>
           <div className="pointer-events-none absolute inset-y-0 left-[clamp(120px,13vw,190px)] right-[clamp(120px,13vw,190px)] hidden lg:block"><svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" className="absolute inset-0 h-full w-full overflow-visible">{positioned.map((item) => <line key={item.label} x1="50" y1="50" x2={item.left} y2={item.top} stroke={`${item.color}${item.inner ? "66" : "33"}`} strokeWidth={item.inner ? "0.3" : "0.16"} vectorEffect="non-scaling-stroke" />)}</svg></div>
           <div className="absolute left-1/2 top-1/2 z-[2] hidden h-32 w-32 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-amber/45 bg-[#151B20] shadow-[0_0_0_16px_rgba(232,162,43,0.05)] lg:grid"><span className="text-center"><span className="block font-mono text-[31px] leading-none text-[#E8A22B]"><AnimatedNumber value={10} /></span><span className="font-mono text-[12.5px] uppercase tracking-[0.06em] text-white/60">years</span></span></div>
-          <div className="col-span-full grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:absolute lg:inset-y-0 lg:left-[clamp(120px,13vw,190px)] lg:right-[clamp(120px,13vw,190px)] lg:block">{positioned.map((item, index) => <button key={item.label} onClick={() => onNavigate(index % 3 === 0 ? "work" : "services")} className={`experience-node flex min-h-[52px] cursor-pointer items-center gap-2 rounded-xl border bg-[#151B20] p-3 text-left text-sm transition hover:bg-[#20272E] hover:text-white lg:absolute lg:min-h-0 lg:-translate-x-1/2 lg:-translate-y-1/2 lg:whitespace-nowrap lg:rounded-full lg:px-[15px] lg:py-2.5 ${item.inner ? "text-white/95" : "text-white/70"}`} style={{ borderColor: `${item.color}55`, left: `${item.left}%`, top: `${item.top}%`, animationDuration: `${7 + (index % 4)}s`, animationDelay: `${(index % 5) * 0.4}s` }}><Icon name={item.icon} className={item.inner ? "text-xl" : "text-lg"} /><span>{item.label}</span></button>)}</div>
+          <div className="col-span-full grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:absolute lg:inset-y-0 lg:left-[clamp(120px,13vw,190px)] lg:right-[clamp(120px,13vw,190px)] lg:block">{positioned.map((item, index) => <button key={item.label} onClick={() => onNavigate(index % 3 === 0 ? "work" : "services")} className={`experience-node flex min-h-[52px] cursor-pointer items-center gap-2 rounded-xl border bg-[#151B20] p-3 text-left text-sm transition hover:bg-[#20272E] hover:text-white lg:absolute lg:min-h-0 lg:-translate-x-1/2 lg:-translate-y-1/2 lg:whitespace-nowrap lg:rounded-full lg:px-[15px] lg:py-2.5 ${item.inner ? "text-white/95" : "text-white/70"}`} style={{ borderColor: `${item.color}55`, left: `${item.left}%`, top: `${item.top}%`, animationDuration: `${7 + (index % 4)}s`, animationDelay: `${(index % 5) * 0.4}s` }}><Icon name={item.icon} className={item.inner ? "text-xl" : "text-lg"} style={{ color: item.color }} /><span>{item.label}</span></button>)}</div>
         </div>
       </div>
     </section>
