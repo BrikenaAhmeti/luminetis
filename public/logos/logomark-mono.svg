@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="13 4 114 138" width="114" height="138" role="img" aria-label="Luminetis">
+  <title>Luminetis logomark, single colour</title>
+  
+  <path d="M34 8C24 32 18 56 18 82C18 116 44 138 100 131C66 126 46 106 44 82C44 56 42 30 34 8Z" fill="currentColor"/>
+  <path d="M122 34L122 82C122 118 94 140 58 132C76 124 92 108 96 82L96 58Z" fill="var(--lu-bg, #F5F2EC)" stroke="var(--lu-bg, #F5F2EC)" stroke-width="9"/>
+  <path d="M122 34L122 82C122 118 94 140 58 132C76 124 92 108 96 82L96 58Z" fill="currentColor"/>
+</svg>

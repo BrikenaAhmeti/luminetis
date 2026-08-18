@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 40" width="260" height="40" role="img" aria-label="Luminetis">
+  <title>Luminetis horizontal lockup</title>
+  
+  <g transform="translate(-3.8,-1.2) scale(0.29)">
+    <path d="M34 8C24 32 18 56 18 82C18 116 44 138 100 131C66 126 46 106 44 82C44 56 42 30 34 8Z" fill="#E8A22B"/>
+    <path d="M122 34L122 82C122 118 94 140 58 132C76 124 92 108 96 82L96 58Z" fill="#F5F2EC" stroke="#F5F2EC" stroke-width="12"/>
+    <path d="M122 34L122 82C122 118 94 140 58 132C76 124 92 108 96 82L96 58Z" fill="#0E1317"/>
+  </g>
+  <text x="47" y="32" fill="#0E1317" font-family="Outfit,Poppins,Figtree,system-ui,sans-serif" font-weight="500" font-size="34" letter-spacing="1.02">luminetis</text>
+</svg>

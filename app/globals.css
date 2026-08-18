@@ -1,0 +1,243 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "Inter";
+  src: url("/fonts/inter.woff2") format("woff2");
+  font-weight: 400 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Outfit";
+  src: url("/fonts/outfit.woff2") format("woff2");
+  font-weight: 400 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("/fonts/jetbrains-mono.woff2") format("woff2");
+  font-weight: 400 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Material Symbols Outlined";
+  src: url("/fonts/material-symbols.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
+}
+
+:root {
+  --lum-amber: #e8a22b;
+  --lum-amber-shade: #b87715;
+  --surface-page: #f5f2ec;
+  --surface-card: #ffffff;
+  --surface-inverse: #0e1317;
+  --text-primary: #0e1317;
+  --text-secondary: #3b454d;
+  --text-link: #0f6e63;
+  --border-hairline: #d8d4cb;
+  --accent: #e8a22b;
+  --accent-text: #8a5309;
+  --on-accent: #0e1317;
+  --on-inverse: #f5f2ec;
+  --shadow-md: 0 4px 12px rgba(14, 19, 23, 0.08), 0 1px 3px rgba(14, 19, 23, 0.06);
+  --shadow-lg: 0 12px 32px rgba(14, 19, 23, 0.12), 0 2px 8px rgba(14, 19, 23, 0.06);
+  color-scheme: light;
+}
+
+[data-theme="dark"] {
+  --surface-page: #0b0f12;
+  --surface-card: #151b20;
+  --surface-inverse: #f5f2ec;
+  --text-primary: #edeae3;
+  --text-secondary: #a3aeb5;
+  --text-link: #4fc3b2;
+  --border-hairline: #242c32;
+  --accent-text: #f0b95c;
+  --on-inverse: #0e1317;
+  --shadow-md: 0 4px 10px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 14px 34px rgba(0, 0, 0, 0.62);
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-page: var(--surface-page);
+  --color-card: var(--surface-card);
+  --color-inverse: var(--surface-inverse);
+  --color-ink: var(--text-primary);
+  --color-muted: var(--text-secondary);
+  --color-link: var(--text-link);
+  --color-line: var(--border-hairline);
+  --color-amber: var(--accent);
+  --color-amber-text: var(--accent-text);
+  --color-on-amber: var(--on-accent);
+  --color-on-inverse: var(--on-inverse);
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-display: "Outfit", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  background: var(--surface-page);
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background: var(--surface-page);
+  color: var(--text-primary);
+  font-family: "Inter", system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.65;
+  text-wrap: pretty;
+  -webkit-font-smoothing: antialiased;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.material-symbols {
+  font-family: "Material Symbols Outlined";
+  font-weight: 400;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  font-feature-settings: "liga";
+  -webkit-font-smoothing: antialiased;
+}
+
+.cut-card {
+  clip-path: polygon(0 0, calc(100% - 24px) 0, 100% 24px, 100% 100%, 0 100%);
+}
+
+.cut-card-reverse {
+  clip-path: polygon(24px 0, 100% 0, 100% 100%, 0 100%, 0 24px);
+}
+
+.reveal {
+  opacity: 0;
+  transform: translate3d(0, 28px, 0);
+  transition: opacity 480ms ease-out, transform 480ms ease-out;
+}
+
+.reveal[data-visible="true"] {
+  opacity: 1;
+  transform: none;
+}
+
+.card-lift {
+  transition: transform 220ms cubic-bezier(0.2, 0.9, 0.3, 1), box-shadow 220ms ease-out, border-color 160ms ease-out;
+}
+
+.card-lift:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
+}
+
+.grain {
+  background-image: linear-gradient(rgba(245, 242, 236, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(245, 242, 236, 0.05) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
+[data-theme="dark"] .logo-mark-light {
+  display: none;
+}
+
+[data-theme="dark"] .logo-mark-dark {
+  display: block;
+}
+
+@keyframes lum-pulse {
+  0% { transform: scale(0.55); opacity: 0.6; }
+  100% { transform: scale(2.1); opacity: 0; }
+}
+
+@keyframes lum-spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes lum-float {
+  0%, 100% { transform: translate(-50%, -50%); }
+  50% { transform: translate(-50%, calc(-50% - 6px)); }
+}
+
+@keyframes lum-sheen {
+  0% { transform: translateX(-120%); }
+  100% { transform: translateX(220%); }
+}
+
+@keyframes lum-fade {
+  0%, 100% { opacity: 0.25; }
+  50% { opacity: 1; }
+}
+
+@keyframes lum-breathe {
+  0%, 100% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.7; }
+  50% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
+}
+
+@keyframes bar-rise {
+  from { transform: scaleY(0.04); }
+  to { transform: scaleY(1); }
+}
+
+@keyframes line-draw {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes drop-in {
+  from { opacity: 0; transform: translateY(-70px); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+  .reveal { opacity: 1; transform: none; }
+}
