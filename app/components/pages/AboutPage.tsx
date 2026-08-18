@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { partnerProfiles } from "../../data/contact";
+import { partnerExperience, partnerProfiles } from "../../data/contact";
 import { aboutPoints, locations, type PageKey } from "../../data/site";
 import { AnimatedNumber } from "../AnimatedNumber";
 import { Icon } from "../Icon";
@@ -47,21 +47,22 @@ export function AboutPage({ onNavigate }: Props) {
         <div className="mx-auto max-w-[1200px] px-5 py-[clamp(48px,7vw,88px)] sm:px-8 lg:px-12">
           <h2 className="font-display text-[clamp(25px,3vw,31px)] font-medium">The team</h2>
           <p className="mb-7 mt-2.5 max-w-[56ch] text-muted">Two of us permanently, and a short list of senior engineers we trust when a project needs more hands. You are told who is working on your project and who to email, always.</p>
-          <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
             {partnerProfiles.map((member) => (
-              <article key={member.name} className="cut-card-reverse overflow-hidden rounded-[18px] border border-line bg-page">
-                <a href={member.linkedin} target="_blank" rel="noopener noreferrer" aria-label={`${member.name} · LinkedIn`} className="group block focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-amber">
-                  <div className="relative aspect-[4/3] overflow-hidden bg-card">
-                    <Image src={member.image} alt={member.name} fill sizes="(min-width: 768px) 33vw, 100vw" className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.025]" style={{ objectPosition: member.imagePosition }} />
-                  </div>
-                  <div className="flex items-center justify-between gap-4 p-6">
+              <article key={member.name} className="cut-card-reverse group flex h-full flex-col overflow-hidden rounded-[18px] border border-line bg-page">
+                <div className="relative aspect-[4/3] overflow-hidden bg-card">
+                  <Image src={member.image} alt={member.name} fill sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw" className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.025]" style={{ objectPosition: member.imagePosition }} />
+                </div>
+                <div className="flex flex-1 flex-col p-6">
+                  <div className="flex items-center justify-between gap-4">
                     <h3 className="font-display text-xl font-medium">{member.name}</h3>
-                    <span className="inline-flex items-center gap-1.5 font-mono text-[12.5px] text-amber-text">LinkedIn <Icon name="north_east" className="text-base" /></span>
+                    <a href={member.linkedin} target="_blank" rel="noopener noreferrer" aria-label={`${member.name} · LinkedIn`} className="inline-flex shrink-0 items-center gap-1.5 font-mono text-[12.5px] text-amber-text transition hover:text-link focus:outline-none focus-visible:ring-2 focus-visible:ring-amber">LinkedIn <Icon name="north_east" className="text-base" /></a>
                   </div>
-                </a>
+                  <p className="mt-4 text-sm leading-[1.65] text-muted">{member.summary} {partnerExperience}</p>
+                </div>
               </article>
             ))}
-            <article className="flex flex-col justify-center gap-3.5 rounded-[18px] border border-dashed border-line bg-page p-7">
+            <article className="flex flex-col justify-center gap-3.5 rounded-[18px] border border-dashed border-line bg-page p-7 md:col-span-2 lg:col-span-1">
               <span className="grid h-11 w-11 place-items-center rounded-xl bg-amber/10 text-amber-text"><Icon name="group_add" /></span>
               <h3 className="font-display text-xl font-medium">Senior people, brought in by name</h3>
               <p className="text-sm leading-[1.6] text-muted">For larger builds we add senior software, data and AI engineers we have worked with before. Same seniority, same accountability, and you are told who they are before they start.</p>
