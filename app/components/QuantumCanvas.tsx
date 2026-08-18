@@ -128,21 +128,20 @@ export function QuantumCanvas() {
     resize();
     const resizeObserver = new ResizeObserver(resize);
     resizeObserver.observe(panel);
-    const target = panel.parentElement ?? panel;
-    target.addEventListener("pointermove", onMove);
-    target.addEventListener("pointerleave", onLeave);
+    panel.addEventListener("pointermove", onMove);
+    panel.addEventListener("pointerleave", onLeave);
     draw();
 
     return () => {
       cancelAnimationFrame(frameId);
       resizeObserver.disconnect();
-      target.removeEventListener("pointermove", onMove);
-      target.removeEventListener("pointerleave", onLeave);
+      panel.removeEventListener("pointermove", onMove);
+      panel.removeEventListener("pointerleave", onLeave);
     };
   }, []);
 
   return (
-    <div ref={panelRef} className="pointer-events-none absolute inset-0 overflow-hidden">
+    <div ref={panelRef} className="absolute inset-0 overflow-hidden">
       <canvas ref={canvasRef} aria-hidden="true" className="block h-full w-full" />
     </div>
   );
