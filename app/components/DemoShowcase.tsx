@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 import { demos } from "../data/site";
 import { Icon } from "./Icon";
@@ -14,10 +15,10 @@ const wineList = [
 ];
 
 const boutiquePieces = [
-  { name: "No. 03 coat", price: "€340", icon: "checkroom" },
-  { name: "No. 05 shirt", price: "€120", icon: "apparel" },
-  { name: "No. 08 trouser", price: "€180", icon: "dry_cleaning" },
-  { name: "No. 11 scarf", price: "€65", icon: "style" },
+  { name: "No. 03 coat", price: "€340", position: "center 12%" },
+  { name: "No. 05 shirt", price: "€120", position: "center 38%" },
+  { name: "No. 08 trouser", price: "€180", position: "center 68%" },
+  { name: "No. 11 scarf", price: "€65", position: "center 92%" },
 ];
 
 const clinicFacts = [
@@ -62,10 +63,10 @@ const agentChat = [
 ];
 
 const shopItems = [
-  { name: "Hex bolt, M12 × 80", sku: "FS-1208-Z", price: "€0.84", icon: "hardware" },
-  { name: "Anchor sleeve, 10 mm", sku: "AN-1000-S", price: "€1.20", icon: "construction" },
-  { name: "Washer, DIN 125", sku: "WS-0125-A", price: "€0.09", icon: "donut_large" },
-  { name: "Threaded rod, 1 m", sku: "TR-1000-M", price: "€3.40", icon: "straighten" },
+  { name: "Hex bolt, M12 × 80", sku: "FS-1208-Z", price: "€0.84", position: "center 10%" },
+  { name: "Anchor sleeve, 10 mm", sku: "AN-1000-S", price: "€1.20", position: "center 36%" },
+  { name: "Washer, DIN 125", sku: "WS-0125-A", price: "€0.09", position: "center 66%" },
+  { name: "Threaded rod, 1 m", sku: "TR-1000-M", price: "€3.40", position: "center 94%" },
 ];
 
 function DemoHeader({ children, dark = false }: { children: React.ReactNode; dark?: boolean }) {
@@ -88,8 +89,8 @@ function WineDemo() {
           <div className="mt-8 flex flex-wrap gap-2.5"><span className="rounded-full bg-[#221A17] px-[22px] py-[13px] text-sm font-medium text-[#FBF7F0]">Reserve for tonight</span><span className="rounded-full border border-[#221A17]/25 px-[22px] py-[13px] text-sm">See the list</span></div>
         </div>
         <div className="relative min-h-[300px] overflow-hidden bg-[#2A1418]">
-          <div className="demo-float absolute left-1/2 top-1/2 aspect-square w-[56%] -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#E8A22B]/45" />
-          <Icon name="wine_bar" className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-[clamp(56px,9vw,104px)] text-[#E8A22B]" />
+          <Image src="/demo/wine-bar.webp" alt="Wine glasses on a warmly lit bar" fill sizes="(min-width: 760px) 50vw, 100vw" className="object-cover object-center" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#2A1418]/80 via-[#2A1418]/10 to-transparent" />
           <div className="absolute inset-0 bg-[repeating-linear-gradient(90deg,rgba(251,247,240,0.04)_0_2px,transparent_2px_26px)]" />
           <p className="absolute bottom-4 left-5 font-mono text-[12.5px] uppercase tracking-[0.1em] text-[#E8A22B]/80">Forty by the glass</p>
         </div>
@@ -110,15 +111,16 @@ function BoutiqueDemo() {
         <span className="ml-auto font-mono text-[12.5px] uppercase tracking-[0.1em]">Bag (0)</span>
       </DemoHeader>
       <div className="relative flex min-h-[380px] flex-col justify-end overflow-hidden p-[clamp(28px,4vw,56px)]">
-        <div className="absolute inset-0"><div className="absolute right-[6%] top-1/2 aspect-square w-[44%] -translate-y-1/2 rounded-full border border-[#F2F0EC]/35" /><Icon name="checkroom" className="absolute right-[18%] top-1/2 -translate-y-1/2 text-[clamp(64px,10vw,132px)] text-[#F2F0EC]/80" /><div className="demo-sheen absolute inset-y-0 w-[26%] bg-gradient-to-r from-transparent via-[#F2F0EC]/10 to-transparent" /></div>
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0B0B0C]/90 via-[#0B0B0C]/45 to-transparent" />
+        <Image src="/demo/boutique.webp" alt="Neutral garments displayed in a minimalist boutique" fill sizes="100vw" className="object-cover object-center" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0B0B0C]/95 via-[#0B0B0C]/60 to-[#0B0B0C]/10" />
+        <div className="demo-sheen absolute inset-y-0 w-[26%] bg-gradient-to-r from-transparent via-[#F2F0EC]/10 to-transparent" />
         <span className="absolute right-[22px] top-[22px] font-mono text-[12.5px] text-[#F2F0EC]/45">Autumn 26 · look 04</span>
         <h3 className="relative max-w-[16ch] font-display text-[clamp(34px,5.2vw,61px)] font-normal leading-[0.98] tracking-[-0.03em]">Autumn, in eleven pieces.</h3>
         <p className="relative mt-3.5 max-w-[32ch] leading-[1.6] text-[#F2F0EC]/70">Cut and sewn in Pristina. Numbered, not restocked.</p>
         <span className="relative mt-[26px] self-start border border-[#F2F0EC] px-6 py-[13px] font-mono text-[12.5px] uppercase tracking-[0.14em]">View the collection</span>
       </div>
       <div className="grid gap-px bg-[#F2F0EC]/15 sm:grid-cols-2 lg:grid-cols-4">
-        {boutiquePieces.map((item) => <div key={item.name} className="bg-[#0B0B0C]"><div className="relative grid aspect-[4/5] place-items-center overflow-hidden bg-[#15161A]"><div className="absolute left-1/2 top-1/2 aspect-square w-[58%] -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#F2F0EC]/20" /><Icon name={item.icon} className="relative text-5xl text-[#F2F0EC]/85" /></div><div className="flex justify-between gap-2.5 px-4 py-3.5 font-mono text-[12.5px]"><span>{item.name}</span><span className="text-[#F2F0EC]/60">{item.price}</span></div></div>)}
+        {boutiquePieces.map((item) => <div key={item.name} className="bg-[#0B0B0C]"><div className="relative aspect-[4/5] overflow-hidden bg-[#15161A]"><Image src="/demo/boutique.webp" alt={`${item.name} from the Atelier Mira collection`} fill sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw" className="object-cover" style={{ objectPosition: item.position }} /><div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0C]/45 to-transparent" /></div><div className="flex justify-between gap-2.5 px-4 py-3.5 font-mono text-[12.5px]"><span>{item.name}</span><span className="text-[#F2F0EC]/60">{item.price}</span></div></div>)}
       </div>
     </div>
   );
@@ -159,7 +161,7 @@ function BlogDemo() {
         <span className="ml-auto rounded-lg bg-[#151312] px-[18px] py-2.5 text-sm font-medium text-[#FFFDF9]">Subscribe</span>
       </DemoHeader>
       <div className="grid grid-cols-1 gap-[clamp(20px,3vw,40px)] p-[clamp(28px,4vw,48px)] min-[760px]:grid-cols-2">
-        <div><div className="relative grid aspect-[16/10] place-items-center overflow-hidden rounded-xl bg-[#20302B]"><div className="absolute -bottom-[30%] -left-[8%] aspect-square w-[58%] rounded-full bg-[rgba(143,196,107,0.32)]" /><div className="absolute -right-[4%] -top-[24%] aspect-square w-[46%] rounded-full bg-[rgba(15,110,99,0.45)]" /><Icon name="agriculture" className="relative text-[clamp(56px,8vw,96px)] text-[#FFFDF9]/90" /><p className="absolute left-[18px] top-4 font-mono text-[12.5px] uppercase tracking-[0.1em] text-[#FFFDF9]/75">Vineyards · Moselle 2026</p></div><p className="mt-[18px] font-mono text-[12.5px] uppercase tracking-[0.08em] text-[#0F6E63]">Long read · 12 min</p><h3 className="mt-2 max-w-[22ch] font-display text-[clamp(25px,3vw,34px)] font-medium leading-[1.1] tracking-[-0.015em]">The last vineyards on the Moselle bend</h3><p className="mt-2.5 max-w-[44ch] text-[#151312]/65">Six growers, one slope, and the year the weather stopped being predictable.</p></div>
+        <div><div className="relative aspect-[16/10] overflow-hidden rounded-xl bg-[#20302B]"><Image src="/demo/vineyard.webp" alt="Rows of grapevines stretching across a green vineyard" fill sizes="(min-width: 760px) 50vw, 100vw" className="object-cover object-center" /><div className="absolute inset-0 bg-gradient-to-b from-[#10211F]/45 via-transparent to-[#10211F]/20" /><p className="absolute left-[18px] top-4 font-mono text-[12.5px] uppercase tracking-[0.1em] text-white/90">Vineyards · Moselle 2026</p></div><p className="mt-[18px] font-mono text-[12.5px] uppercase tracking-[0.08em] text-[#0F6E63]">Long read · 12 min</p><h3 className="mt-2 max-w-[22ch] font-display text-[clamp(25px,3vw,34px)] font-medium leading-[1.1] tracking-[-0.015em]">The last vineyards on the Moselle bend</h3><p className="mt-2.5 max-w-[44ch] text-[#151312]/65">Six growers, one slope, and the year the weather stopped being predictable.</p></div>
         <div className="grid content-start gap-0.5">{blogPosts.map((post) => <div key={post.title} className="flex gap-3.5 border-t border-[#151312]/10 py-4"><span className="grid h-14 w-14 shrink-0 place-items-center rounded-lg" style={{ background: post.tone }}><Icon name={post.icon} className="text-[26px] text-[#FFFDF9]/90" /></span><span><span className="block font-mono text-[12.5px] uppercase tracking-[0.08em] text-[#151312]/50">{post.kicker}</span><span className="mt-1 block font-display text-lg font-medium leading-[1.25]">{post.title}</span></span></div>)}</div>
       </div>
     </div>
@@ -170,7 +172,7 @@ function AutoDemo() {
   return (
     <div className="bg-[#0A0D10] text-[#EAF0F4]">
       <DemoHeader dark><span className="flex items-center gap-2.5"><Icon name="local_car_wash" className="text-2xl text-[#5AC8F5]" /><span className="font-display text-[19px] font-medium tracking-[0.02em]">AutoWaxon</span></span><span className="hidden gap-5 text-sm text-[#EAF0F4]/65 md:flex"><span>Detailing</span><span>Ceramic</span><span>Gallery</span></span><span className="ml-auto rounded-full bg-[#5AC8F5] px-[18px] py-2.5 text-sm font-medium text-[#06212E]">Book a slot</span></DemoHeader>
-      <div className="relative flex min-h-[340px] flex-col justify-end overflow-hidden p-[clamp(28px,4vw,56px)]"><div className="absolute right-[4%] top-1/2 aspect-square w-[46%] -translate-y-1/2 rounded-full bg-[radial-gradient(closest-side,rgba(90,200,245,0.28),rgba(90,200,245,0))]" /><Icon name="directions_car" className="absolute right-[14%] top-[46%] -translate-y-1/2 text-[clamp(72px,12vw,168px)] text-[#EAF0F4]/90" /><div className="demo-sheen absolute inset-y-0 w-[22%] bg-gradient-to-r from-transparent via-[#EAF0F4]/15 to-transparent" /><p className="relative font-mono text-[12.5px] uppercase tracking-[0.08em] text-[#5AC8F5]">Detailing studio · Luxembourg</p><h3 className="relative mt-4 max-w-[18ch] font-display text-[clamp(31px,4.4vw,49px)] font-medium leading-[1.02] tracking-[-0.02em]">Paint that looks better than the day it left the factory.</h3><p className="relative mt-3.5 max-w-[36ch] leading-[1.6] text-[#EAF0F4]/75">Correction, ceramic coating and interior work. Collection and delivery inside the city.</p></div>
+      <div className="relative flex min-h-[340px] flex-col justify-end overflow-hidden p-[clamp(28px,4vw,56px)]"><Image src="/demo/auto-detailing.webp" alt="A professional detailer polishing a black car" fill sizes="100vw" className="object-cover object-center" /><div className="absolute inset-0 bg-gradient-to-r from-[#0A0D10]/95 via-[#0A0D10]/65 to-[#0A0D10]/15" /><div className="demo-sheen absolute inset-y-0 w-[22%] bg-gradient-to-r from-transparent via-[#EAF0F4]/15 to-transparent" /><p className="relative font-mono text-[12.5px] uppercase tracking-[0.08em] text-[#5AC8F5]">Detailing studio · Luxembourg</p><h3 className="relative mt-4 max-w-[18ch] font-display text-[clamp(31px,4.4vw,49px)] font-medium leading-[1.02] tracking-[-0.02em]">Paint that looks better than the day it left the factory.</h3><p className="relative mt-3.5 max-w-[36ch] leading-[1.6] text-[#EAF0F4]/75">Correction, ceramic coating and interior work. Collection and delivery inside the city.</p></div>
       <div className="grid gap-px border-t border-[#EAF0F4]/10 bg-[#EAF0F4]/10 min-[720px]:grid-cols-3">{autoServices.map((service) => <div key={service.name} className="flex gap-3.5 bg-[#0A0D10] px-[clamp(18px,2vw,26px)] py-[22px]"><Icon name={service.icon} className="text-2xl text-[#5AC8F5]" /><span className="flex-1"><span className="block font-display text-lg font-medium leading-[1.3]">{service.name}</span><span className="mt-1 block text-sm text-[#EAF0F4]/60">{service.detail}</span><span className="mt-2.5 block font-mono">{service.price}</span></span></div>)}</div>
     </div>
   );
@@ -192,7 +194,7 @@ function ShopDemo() {
   return (
     <div className="bg-[#F6F7F9] text-[#131A22]">
       <DemoHeader><span className="font-display text-[19px] font-medium">Ferrum Supply</span><span className="hidden max-w-80 flex-1 items-center gap-2 rounded-full bg-[#F1F3F6] px-3.5 py-2 font-mono text-[12.5px] text-[#131A22]/50 sm:flex"><Icon name="search" className="text-base" />Search 4,200 parts</span><span className="ml-auto flex items-center gap-4 font-mono text-[12.5px]"><span className="hidden sm:inline">Trade account</span><span className="flex items-center gap-1.5 rounded-lg bg-[#2F6D9E] px-3.5 py-2 text-white"><Icon name="shopping_bag" className="text-base" />3</span></span></DemoHeader>
-      <div className="p-[clamp(24px,4vw,44px)]"><div className="mb-5 flex flex-wrap items-baseline justify-between gap-3"><h3 className="font-display text-[clamp(25px,3vw,31px)] font-medium leading-[1.15]">Fixings and fasteners</h3><span className="font-mono text-[12.5px] text-[#131A22]/55">4,200 lines · next-day to site</span></div><div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2 lg:grid-cols-4">{shopItems.map((item) => <div key={item.name} className="overflow-hidden rounded-xl border border-[#131A22]/10 bg-white"><div className="relative grid aspect-[4/3] place-items-center overflow-hidden bg-[#E7EAEE]"><div className="absolute inset-0 bg-[linear-gradient(rgba(19,26,34,0.06)_1px,transparent_1px),linear-gradient(90deg,rgba(19,26,34,0.06)_1px,transparent_1px)] bg-[size:16px_16px]" /><Icon name={item.icon} className="relative text-[52px] text-[#2F6D9E]" /></div><div className="p-3.5"><p className="text-sm font-medium leading-[1.35]">{item.name}</p><p className="mt-1.5 font-mono text-[12.5px] text-[#131A22]/55">{item.sku}</p><p className="mt-2.5 flex items-center justify-between gap-2.5"><span className="font-mono">{item.price}</span><span className="rounded-lg bg-[#2F6D9E] px-3 py-2 text-[12.5px] font-medium text-white">Add</span></p></div></div>)}</div></div>
+      <div className="p-[clamp(24px,4vw,44px)]"><div className="mb-5 flex flex-wrap items-baseline justify-between gap-3"><h3 className="font-display text-[clamp(25px,3vw,31px)] font-medium leading-[1.15]">Fixings and fasteners</h3><span className="font-mono text-[12.5px] text-[#131A22]/55">4,200 lines · next-day to site</span></div><div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2 lg:grid-cols-4">{shopItems.map((item) => <div key={item.name} className="overflow-hidden rounded-xl border border-[#131A22]/10 bg-white"><div className="relative aspect-[4/3] overflow-hidden bg-[#E7EAEE]"><Image src="/demo/fasteners.webp" alt={`${item.name} industrial hardware`} fill sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw" className="object-cover" style={{ objectPosition: item.position }} /><div className="absolute inset-0 bg-[#2F6D9E]/10" /></div><div className="p-3.5"><p className="text-sm font-medium leading-[1.35]">{item.name}</p><p className="mt-1.5 font-mono text-[12.5px] text-[#131A22]/55">{item.sku}</p><p className="mt-2.5 flex items-center justify-between gap-2.5"><span className="font-mono">{item.price}</span><span className="rounded-lg bg-[#2F6D9E] px-3 py-2 text-[12.5px] font-medium text-white">Add</span></p></div></div>)}</div></div>
     </div>
   );
 }
