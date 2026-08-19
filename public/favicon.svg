@@ -1,10 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16" role="img" aria-label="Luminetis">
-  <title>Luminetis favicon, 16 px</title>
-  
-  <rect width="16" height="16" rx="3" fill="#0E1317"/>
-  <g transform="translate(1.9,1.7) scale(0.087)">
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080" viewBox="240 245 600 600" role="img" aria-label="Luminetis">
+  <title>Luminetis</title>
+  <defs><clipPath id="mark"><path d="M34 8C24 32 18 56 18 82C18 116 44 138 100 131C66 126 46 106 44 82C44 56 42 30 34 8Z"/></clipPath></defs>
+  <rect width="1080" height="1080" fill="#0E1317"/>
+  <g transform="translate(288 277.2) scale(3.6)">
     <path d="M34 8C24 32 18 56 18 82C18 116 44 138 100 131C66 126 46 106 44 82C44 56 42 30 34 8Z" fill="#E8A22B"/>
-    <path d="M122 34L122 82C122 118 94 140 58 132C76 124 92 108 96 82L96 58Z" fill="#0E1317" stroke="#0E1317" stroke-width="30"/>
+    <g clip-path="url(#mark)"><path d="M122 34L122 82C122 118 94 140 58 132C76 124 92 108 96 82L96 58Z" transform="translate(-10 7)" fill="#B87715"/></g>
     <path d="M122 34L122 82C122 118 94 140 58 132C76 124 92 108 96 82L96 58Z" fill="#F5F2EC"/>
   </g>
 </svg>

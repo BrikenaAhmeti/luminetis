@@ -5,11 +5,11 @@ const title = "Luminetis | Engineering that makes you visible";
 const description = "Fast websites, web applications, local search, data, AI and infrastructure, built by senior engineers in Luxembourg and Kosovo.";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://luminetis.com"),
+  metadataBase: new URL("https://www.luminetis.com"),
   title: { default: title, template: "%s | Luminetis" },
   description,
   applicationName: "Luminetis",
-  authors: [{ name: "Luminetis", url: "https://luminetis.com" }],
+  authors: [{ name: "Luminetis", url: "https://www.luminetis.com" }],
   creator: "Luminetis",
   publisher: "Luminetis",
   category: "technology",
@@ -19,9 +19,13 @@ export const metadata: Metadata = {
     languages: { "en-GB": "/?lang=en", fr: "/?lang=fr", de: "/?lang=de", sq: "/?lang=sq", es: "/?lang=es", pt: "/?lang=pt", it: "/?lang=it", "x-default": "/" },
   },
   icons: {
-    icon: [{ url: "/favicon.svg", type: "image/svg+xml" }, { url: "/logos/favicon-16.svg", sizes: "16x16", type: "image/svg+xml" }],
-    shortcut: "/favicon.svg",
-    apple: "/logos/logomark-colour.svg",
+    icon: [
+      { url: "/favicon-96.png", sizes: "96x96", type: "image/png" },
+      { url: "/favicon.ico", sizes: "48x48", type: "image/x-icon" },
+      { url: "/favicon.svg", sizes: "any", type: "image/svg+xml" },
+    ],
+    shortcut: "/favicon.ico",
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
   },
   manifest: "/manifest.webmanifest",
   openGraph: {
