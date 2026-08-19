@@ -21,6 +21,7 @@ export const socialProfiles = [
   { key: "tiktok", label: "TikTok", href: "https://www.tiktok.com/@luminetis?_r=1&_t=ZS-98znWSvbzNJ" },
   { key: "facebook", label: "Facebook", href: "https://www.facebook.com/share/1FMspXM8VF/" },
   { key: "instagram", label: "Instagram", href: "https://www.instagram.com/luminetis?igsh=MWpoc2QybDFjc2liaA==" },
+  { key: "linkedin", label: "LinkedIn", href: "https://linkedin.com/company/luminetis" },
 ] as const;
 
 export type SocialProfileKey = (typeof socialProfiles)[number]["key"];

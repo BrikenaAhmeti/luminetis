@@ -1,5 +1,5 @@
 import type { IconType } from "react-icons";
-import { FaFacebookF, FaInstagram, FaTiktok } from "react-icons/fa6";
+import { FaFacebookF, FaInstagram, FaLinkedinIn, FaTiktok } from "react-icons/fa6";
 import { socialProfiles, type SocialProfileKey } from "../data/contact";
 
 type Props = {
@@ -11,6 +11,7 @@ const icons: Record<SocialProfileKey, IconType> = {
   tiktok: FaTiktok,
   facebook: FaFacebookF,
   instagram: FaInstagram,
+  linkedin: FaLinkedinIn,
 };
 
 export function SocialLinks({ className = "", inverse = false }: Props) {
